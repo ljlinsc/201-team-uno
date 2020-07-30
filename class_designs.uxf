@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>147</x>
+      <y>70</y>
+      <w>147</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>Server
+--
+
+--
++broadcastMessage() : void
++createRoom() : void
++getRoom() : Room</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>301</x>
+      <y>56</y>
+      <w>147</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>ServerRoom
+--
+
+--
++initializeGame() : void
++startGame() : void
++broadcastMessage() : void
++broadcastTurn() : void
++getPlayer() : Player
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>147</x>
+      <y>238</y>
+      <w>161</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>GameState
+--
+-players : Vector&lt;ServerThread&gt;
+-drawDeck : Vector&lt;Card&gt;
+-discardDeck : Vector&lt;Card&gt;
+--
++cardPlayed() : void
++drawCard() : void
++executeCardAction() : void
++shuffleDeck() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>7</x>
+      <y>126</y>
+      <w>112</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>Type
+--
+-number : Integer
+-color : Color
+--
++getNumber() : Integer
++getColor : Color</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>329</x>
+      <y>196</y>
+      <w>182</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>ServerThread
+--
+-server : Server
+-username : String
+-playerHand : Vector&lt;Card&gt;
+--
++startTurn() : void
++sendMessage(String Message) : void
++playersTurn()
+JSONObject turn
++drawCard()
++playCard()
+
+--
+Responsibilities
+-- Resp1
+*-- Resp2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>329</x>
+      <y>343</y>
+      <w>147</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>Card
+--
+-id: Long
+-type : Type
+--
+#Operation(i: int): int
+/+AbstractOperation()/
+--
+Responsibilities
+-- Resp1
+*-- Resp2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>154</x>
+      <y>406</y>
+      <w>147</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>Deck
+--
+-id: Long
+_-ClassAttribute: Long_
+--
+#Operation(i: int): int
+/+AbstractOperation()/
+--
+Responsibilities
+-- Resp1
+*-- Resp2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
