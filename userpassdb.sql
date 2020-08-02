@@ -5,6 +5,6 @@ USE Users;
 CREATE TABLE UserInfo (
 	UID INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
-    pass VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL,
     nickname VARCHAR(50) NOT NULL
 );

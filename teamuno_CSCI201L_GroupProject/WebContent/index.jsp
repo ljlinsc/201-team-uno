@@ -22,10 +22,10 @@
 		    </div>
 		    <div class="divider"></div>
 		    <div class="other-options">
-		    	<form name="createuserform" method="GET" action="CreateUserServlet">
+		    	<form name="createuserform" method="POST" action="newuser.jsp">
 		    		<input id="yellow-button" type="submit" name="createusersubmit" value="Create a new account">
 		    	</form>
-		    	<form name="guestform" method="GET" action="GuestServlet">
+		    	<form name="guestform" method="POST" action="GuestServlet">
 		    		<input id="yellow-button" type="submit" name="guestsubmit" value="Enter as a guest">
 		    	</form>
 		    </div>
