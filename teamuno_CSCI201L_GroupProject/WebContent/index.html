@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Sign In</title>
-  </head>
-  <body>
-    <h1>Sign In</h1>
-    <form name="signinform" method="GET" action="SignInServlet">
-      <table>
-        <tr>
-          <td><input type="text" placeholder="username" name="username" /></td>
-        </tr>
-        <tr>
-          <td><input type="password" placeholder="password" name="password" /></td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <input type="submit" name="submit" value="Enter" />
-          </td>          
-        </tr>
-      </table>
-    </form>
-  </body>
+	<head>
+		<title>201 UNO</title>
+		<link href="https://fonts.googleapis.com/css2?family=Varta:wght@300;400;600&display=swap" rel="stylesheet">
+    	<link rel="stylesheet" type="text/css" href="CSS/main.css">
+  	</head>
+  	<body>
+  		<div class="main-wrapper">
+		  	<div class="sign-in">
+			    <p class="sign-in-header">Sign In</p>
+			    <form name="signinform" method="GET" action="SignInServlet">
+			    	<input id="userpass" type="text" placeholder="username" name="username" />
+			        <input id="userpass" type="password" placeholder="password" name="password" />
+			        <input id="sign-in-submit" type="submit" name="signinsubmit" value="Enter" />
+			    </form>
+		    </div>
+		    <div class="divider"></div>
+		    <div class="other-options">
+		    	<form name="createuserform" method="GET" action="CreateUserServlet">
+		    		<input id="yellow-button" type="submit" name="createusersubmit" value="Create a new account">
+		    	</form>
+		    	<form name="guestform" method="GET" action="GuestServlet">
+		    		<input id="yellow-button" type="submit" name="guestsubmit" value="Enter as a guest">
+		    	</form>
+		    </div>
+		</div>
+	</body>
 </html>

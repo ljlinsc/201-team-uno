@@ -1,0 +1,127 @@
+@charset "ISO-8859-1";
+
+body {
+	font-family: "Varta";
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+::-webkit-input-placeholder {
+	font-family: "Varta";
+	font-weight: 300;
+	font-style: italic;
+   color: #ABABAB;
+}
+:-moz-placeholder {
+		font-family: "Varta";
+	font-weight: 300;
+	font-style: italic;
+	color: #ABABAB;
+}
+::-moz-placeholder {
+		font-family: "Varta";
+	font-weight: 300;
+	font-style: italic;
+	color: #ABABAB; 
+}
+:-ms-input-placeholder {  
+		font-family: "Varta";
+	font-weight: 300;
+	font-style: italic;
+	color: #ABABAB;
+}
+
+.main-wrapper {
+	height: 225px;
+	margin: auto;
+	position: absolute;
+	vertical-align: middle;
+	width: 630px;
+    top:  50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.sign-in {
+	float: left;
+	margin: 10px;
+	width: 300px;
+}
+
+.sign-in-header {
+	margin: 0px;
+	margin-left: 10px;
+	font-size: 24px;
+	font-family: "Varta";
+	font-weight: 600;
+}
+
+.sign-in form {
+	float: right;	
+	text-align: right;
+	width: 100%;
+}
+
+#userpass {
+	background-color: #F0F0F0;
+	font-size: 24px;
+	height: 20px;
+	width: 260px;
+	padding: 10px;
+	border-radius: 10px;
+	margin: 10px;
+	border: 0;
+}
+
+#sign-in-submit {
+	background-color: #FF6C6C;
+	color: white;
+	padding: 5px;
+		padding-bottom: 0px;
+	
+	text-align: center;
+	width: 100px;
+	font-family: "Varta";
+	font-size: 24px;
+	font-weight: 600;
+	margin: 10px;
+	border-radius: 10px;
+	border: 0px;
+}
+
+.divider {
+	background-color: #F0F0F0;
+	margin-left: 5px;
+	margin-right: 5px;
+	float: left;
+	height: 100%;
+	width: 5px;
+}
+
+.other-options {
+	float: left;
+	margin-top: 34.67px;
+	padding: 10px;
+	width: 275px;
+}
+
+#yellow-button {
+	background-color: #FEB84E;
+	color: white;
+	padding: 5px;
+	padding-bottom: 0px;
+	padding-left: 10px;
+	padding-right: 10px;
+	text-align: center;
+	font-family: "Varta";
+	font-size: 24px;
+	font-weight: 600;
+	margin: 10px;
+	border-radius: 10px;
+	border: 0px;
+}
