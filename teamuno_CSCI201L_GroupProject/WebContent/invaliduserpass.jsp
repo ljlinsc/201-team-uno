@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <html>
   <head>
     <title>Sign In</title>
@@ -8,11 +9,10 @@
     <form name="signinform" method="GET" action="SignInServlet">
       <table>
         <tr>
-          <td><input type="text" name="username" /></td>
+          <td><input type="text" placeholder="username" name="username" /></td>
         </tr>
         <tr>
-          <td>Password</td>
-          <td><input type="password" name="password" /></td>
+          <td><input type="password" placeholder="password" name="password" /></td>
         </tr>
         <tr>
           <td colspan="2">
