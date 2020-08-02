@@ -53,12 +53,26 @@ button:focus {
 	width: 300px;
 }
 
+.header {
+	float: right;
+	width: 100%;
+}
+
 .sign-in-header {
 	margin: 0px;
 	margin-left: 10px;
 	font-size: 24px;
 	font-family: "Varta";
 	font-weight: 600;
+	float: left;
+}
+
+.invalid-user {
+	font-style: italic;
+	font-size: 18px;
+	color: #FF0000;
+	float: right;
+	margin: 0px;
 }
 
 .sign-in form {
