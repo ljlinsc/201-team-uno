@@ -1,50 +1,50 @@
 @charset "ISO-8859-1";
 
-body {
-	font-family: "Varta";
-}
-
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
-    outline: none;
-}
-
 ::-webkit-input-placeholder {
 	font-family: "Varta";
 	font-weight: 300;
 	font-style: italic;
-   color: #ABABAB;
-}
-:-moz-placeholder {
-		font-family: "Varta";
-	font-weight: 300;
-	font-style: italic;
 	color: #ABABAB;
 }
-::-moz-placeholder {
-		font-family: "Varta";
-	font-weight: 300;
-	font-style: italic;
-	color: #ABABAB; 
-}
-:-ms-input-placeholder {  
-		font-family: "Varta";
+
+:-moz-placeholder {
+	font-family: "Varta";
 	font-weight: 300;
 	font-style: italic;
 	color: #ABABAB;
 }
 
-.main-wrapper {
+::-moz-placeholder {
+	font-family: "Varta";
+	font-weight: 300;
+	font-style: italic;
+	color: #ABABAB;
+}
+
+:-ms-input-placeholder {
+	font-family: "Varta";
+	font-weight: 300;
+	font-style: italic;
+	color: #ABABAB;
+}
+
+body {
+	font-family: "Varta";
+}
+
+input:focus, select:focus, textarea:focus, button:focus {
+	outline: none;
+}
+
+.sign-in-wrapper {
 	height: 225px;
 	margin: auto;
 	position: absolute;
 	vertical-align: middle;
 	width: 630px;
-    top:  50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .sign-in {
@@ -53,21 +53,21 @@ button:focus {
 	width: 300px;
 }
 
-.header {
+.sign-in-header {
 	float: right;
 	width: 100%;
 }
 
-.sign-in-header {
+.header {
 	margin: 0px;
 	margin-left: 10px;
-	font-size: 24px;
+	font-size: 20px;
 	font-family: "Varta";
 	font-weight: 600;
 	float: left;
 }
 
-.invalid-user {
+.invalid {
 	font-style: italic;
 	font-size: 18px;
 	color: #FF0000;
@@ -76,18 +76,18 @@ button:focus {
 }
 
 .sign-in form {
-	float: right;	
+	float: right;
 	text-align: right;
 	width: 100%;
 }
 
 .newuser form {
-	float: right;	
+	float: right;
 	text-align: right;
 	width: 100%;
 }
 
-#userpass {
+.gray-text-input {
 	background-color: #F0F0F0;
 	font-size: 24px;
 	height: 20px;
@@ -98,7 +98,7 @@ button:focus {
 	border: 0;
 }
 
-#sign-in-submit {
+.submit {
 	background-color: #FF6C6C;
 	color: white;
 	padding: 5px;
@@ -111,6 +111,7 @@ button:focus {
 	margin: 10px;
 	border-radius: 10px;
 	border: 0px;
+	float: right;
 }
 
 .divider {
@@ -129,7 +130,7 @@ button:focus {
 	width: 275px;
 }
 
-#yellow-button {
+.yellow-button {
 	background-color: #FEB84E;
 	color: white;
 	padding: 5px;
@@ -145,13 +146,54 @@ button:focus {
 	border: 0px;
 }
 
+.new-game {
+	text-align: center;
+}
+
 .newuser {
 	height: 300px;
 	margin: auto;
 	position: absolute;
 	vertical-align: middle;
 	width: 300px;
-    top:  50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.lobby-wrapper {
+	height: 300px;
+	width: 100%;
+	margin: auto;
+	position: absolute;
+	vertical-align: middle;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.greeting h1 {
+	text-align: center;
+}
+
+.lobby-content {
+	height: 225px;
+	margin: auto;
+	position: absolute;
+	bottom: 0px;
+	width: 300px;
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
+.new-game {
+	margin: auto;
+}
+
+.divider-vert {
+	background-color: #F0F0F0;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	width: 100%;
+	height: 5px;
 }

@@ -7,10 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class JDBC_Core {
-	public static boolean verifySignIn(String username, String password) throws ClassNotFoundException {
+	public static User verifySignIn(String username, String password) throws ClassNotFoundException {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		User user = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); 
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/Users?user=root&password=root");
@@ -20,8 +21,9 @@ public class JDBC_Core {
 			rs = ps.executeQuery();
 			if (!rs.next()) {
 				System.out.println("not found");
-				return false;
+				return null;
 			}
+			user = new User(rs.getString("username"), rs.getString("nickname"), true);
 		} catch (SQLException sqle) {
 			System.out.println ("SQLException: " + sqle.getMessage());
 		} finally {
@@ -39,15 +41,16 @@ public class JDBC_Core {
 				System.out.println("sqle: " + sqle.getMessage());
 			}
 		}
-		return true;
+		return user;
 	}
 	
-	public static boolean createUser(String username, String password, String nickname) throws ClassNotFoundException {
+	public static User createUser(String username, String password, String nickname) throws ClassNotFoundException {
 		Connection conn = null;
 		PreparedStatement ps1 = null;
 		PreparedStatement ps2 = null;
 		ResultSet rs1 = null;
 		ResultSet rs2 = null;
+		User user = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); 
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/Users?user=root&password=root");
@@ -55,8 +58,9 @@ public class JDBC_Core {
 			ps1.setString(1, username);
 			rs1 = ps1.executeQuery();
 			if (rs1.next()) {
-				return false;
+				return null;
 			} 
+			user = new User(username, nickname, true);
 			ps2 = conn.prepareStatement("INSERT INTO UserInfo (username, password, nickname) VALUES (?, ?, ?)");
 			ps2.setString(1, username); 
 			ps2.setString(2, password);
@@ -85,6 +89,6 @@ public class JDBC_Core {
 				System.out.println("sqle: " + sqle.getMessage());
 			}
 		}
-		return true;
+		return user;
 	}
 }

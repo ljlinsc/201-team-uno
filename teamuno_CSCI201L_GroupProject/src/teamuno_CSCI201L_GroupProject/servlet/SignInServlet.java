@@ -8,8 +8,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import teamuno_CSCI201L_GroupProject.JDBC_Core;
+import teamuno_CSCI201L_GroupProject.User;
 
 @WebServlet("/SignInServlet")
 public class SignInServlet extends HttpServlet {
@@ -19,12 +21,16 @@ public class SignInServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String next = "/index.jsp";
+		User user = null;
 		try {
-			if (username != null && password != null && JDBC_Core.verifySignIn(username, password)) {
-				next = "/lobby.html";
-			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("cnfe error.");
+			user = JDBC_Core.verifySignIn(username, password);
+		} catch (ClassNotFoundException e1) {
+			System.out.println("Error while retrieving the user information.");
+		}
+		if (username != null && password != null && user != null) {
+			HttpSession session = request.getSession();
+			session.setAttribute("user", user);
+			next = "/lobby.jsp";
 		}
 		request.setAttribute("message", "invalid user/pass");
 		RequestDispatcher dispatch = getServletContext().getRequestDispatcher(next);

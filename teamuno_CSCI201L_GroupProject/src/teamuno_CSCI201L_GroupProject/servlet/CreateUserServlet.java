@@ -8,8 +8,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import teamuno_CSCI201L_GroupProject.JDBC_Core;
+import teamuno_CSCI201L_GroupProject.User;
 
 /**
  * Servlet implementation class CreateUserServlet
@@ -23,12 +25,16 @@ public class CreateUserServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		String nickname = request.getParameter("nickname");
 		String next = "/newuser.jsp";
+		User user = null;
 		try {
-			if (username != null && password != null && JDBC_Core.createUser(username, password, nickname)) {
-				next = "/lobby.html";
-			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("cnfe error.");
+			user = JDBC_Core.createUser(username, password, nickname);
+		} catch (ClassNotFoundException e1) {
+			System.out.println("Error while retrieving the user information.");
+		}
+		if (username != null && password != null && user != null) {
+			HttpSession session = request.getSession();
+			session.setAttribute("user", user);
+			next = "/lobby.jsp";
 		}
 		request.setAttribute("message", "username already taken");
 		RequestDispatcher dispatch = getServletContext().getRequestDispatcher(next);
