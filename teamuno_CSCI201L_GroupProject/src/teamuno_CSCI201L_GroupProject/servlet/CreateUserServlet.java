@@ -40,5 +40,4 @@ public class CreateUserServlet extends HttpServlet {
 		RequestDispatcher dispatch = getServletContext().getRequestDispatcher(next);
 		dispatch.forward(request, response);
 	}
-
 }
