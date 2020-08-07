@@ -1,14 +1,23 @@
 package teamuno_CSCI201L_GroupProject;
 
+import javax.websocket.Session;
+
 public class User {
 	private String username;
 	private String nickname;
+	private Session comm;
 	private boolean registered;
 	
-	public User(String username, String nickname, boolean registered) {
+	public User(String username, String nickname, Session comm) {
 		this.setUsername(username);
 		this.setNickname(nickname);
-		this.setRegistered(registered);
+		if (username== null) {
+			this.registered = false;
+		}
+		else {
+			this.registered = true;
+		}
+		this.comm = comm;
 	}
 	
 	public String getUsername() {
