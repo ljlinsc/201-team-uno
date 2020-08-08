@@ -1,0 +1,79 @@
+@CHARSET "ISO-8859-1";
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	min-height: 100vh;
+}
+
+body {
+	margin: 0;
+	background: radial-gradient(#ffffff, #73726f);
+	
+}
+.page-title {
+	color: #FF6D00;
+	font-family: Arial;
+	font-weight: normal;
+	text-align: center;
+	font-size: 6em;
+}
+
+.game-info {
+	color:#3b3b3b ;
+	font-family: serif;
+	font-size: 4em;
+}
+
+.game-info-container {
+	grid-column: 1 / -1;
+	display: flex;
+	justify-content: space-between;
+}
+
+.game-container {
+	display: grid;
+	grid-template-columns: repeat(6, auto);
+	grid-gap: 10px;
+	margin: 50px;
+	justify-content: center;
+}
+
+.card {
+	position: relative;
+	background-color: black;
+	height: 175px;
+	width: 125px;
+	border-radius: 2em;
+		transition: transorm 100ms ease-in-out;
+	cursor: pointer;
+}
+
+.card-face {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	aligh-items: center;
+	cursor: pointer;
+	
+}
+
+.card:hover {
+	height: 180px;
+	width: 130px;
+}
+
+
+.uno {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.card-hover {
+	/* */
+}

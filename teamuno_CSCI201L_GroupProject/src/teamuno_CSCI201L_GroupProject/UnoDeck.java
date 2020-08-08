@@ -56,14 +56,14 @@ public class UnoDeck {
 		this.cardsInDeck = 108;
 	}
 	
-	private void shuffle() {
+	public void shuffle() {
 		int n = cards.size();
 		Random random = new Random();
 		
 		for (int i = 0; i < cards.size(); i++) {
 			int randomValue = i + random.nextInt(n - 1);
 			UnoCard randomCard = cards.get(randomValue);
-			cards.get(randomValue, cards.get(i));
+			cards.set(randomValue, cards.get(i));
 			cards.set(i, randomCard);
 		}
 	}
@@ -91,12 +91,12 @@ public class UnoDeck {
 		return cards.get(cardsInDeck-1).toString() + ".png";
 	}
 	
-	public Vector<UnoCard> drawCard(int n) throw IllegalArgumentException {
+	public Vector<UnoCard> drawCard(int n) throws IllegalArgumentException {
 		if (n < 0) {
 			throw new IllegalArgumentException("Must draw positive cards"); 
 		}
-		if (n > cardsInDeck()) {
-			throw IllegalArgumentException("Cannot draw " + n + " cards since there are only " + cardsInDeck + " cards in the deck");
+		if (n > cardsInDeck) {
+			throw new IllegalArgumentException("Cannot draw " + n + " cards since there are only " + cardsInDeck + " cards in the deck");
 		}
 		
 		Vector<UnoCard> ret = new Vector<UnoCard>();
@@ -104,5 +104,6 @@ public class UnoDeck {
 		for (int i = 0; i < n; i++) {
 			ret.add(cards.get(--cardsInDeck));
 		}
+		return ret;
 	}
 }
