@@ -130,12 +130,27 @@ public class RoomSocket {
 				+ "\"type\" : \"error\","
 				+ "\"message\" : \"TESTTEST! already exists and is in the room\""
 				+ "}";
+		String cardData = "<div class=\"card\">\n" + 
+				"				<div class=\"card-back card-face\">\n" + 
+				"					<img class=\"uno\" src=\"IMG/Blue_Zero.png\">\n" + 
+				"				</div>\n" + 
+				"				<div class=\"card-front card-face\">\n" + 
+				"				\n" + 
+				"				</div>\n" + 
+				"			</div>";
+		cardData="Red_Zero.png";
+		String addMessage = "{"
+				+ "\"type\" : \"content-change\","
+				+ "\"message\" : \"" + cardData + "\","
+				+ "\"contentChangeType\" : \"addCard\""
+				+ "}";
+		
 		
 		try {
-			session.getBasicRemote().sendText(errorMessage);
+			session.getBasicRemote().sendText(addMessage);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("could not send msg="+errorMessage);
+			System.out.println("could not send msg="+addMessage);
 			e.printStackTrace();
 		}
 		

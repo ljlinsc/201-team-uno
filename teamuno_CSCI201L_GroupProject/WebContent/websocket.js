@@ -119,6 +119,7 @@ function connect() {
 	{
 		"type" : String, [valid values = "error", "content-change"]
 		message : String,
+		"contentChangeType" : "addCard";
 	}
 */
 function processMessage(message) {
@@ -126,7 +127,9 @@ function processMessage(message) {
 	if (text.type === "error") {
 		alert(text.message);
 	} else if (text.type === "content-change") {
-		
+		if (text.contentChangeType === "addCard") {
+			addCard(text.message);
+		} 
 	} else {
 		console.log("from processMessage(): Could not recongnize message type " + text.type);
 		
@@ -135,7 +138,27 @@ function processMessage(message) {
 
 function draw() {
 	console.log("draw()");
-	game.socket.send("draw");
+	var data = {
+			"action" : "draw",
+			"username" : "testUsername",
+			"roomID" : "testID"
+	};
+	
+	game.socket.send(JSON.stringify(data));
+}
+
+function addCard(HTMLData) {
+	var cardHolder = document.getElementsByClassName("cardContainer");
+	var cardData = "<div class=\"card\">" +
+	"<div class=\"card\">\n" + 
+	"				<div class=\"card-back card-face\">\n" + 
+	"					<img class=\"uno\" src=\"IMG/" + HTMLData + "\">\n" + 
+	"				</div>\n" + 
+	"				<div class=\"card-front card-face\">\n" + 
+	"				\n" + 
+	"				</div>\n" + 
+	"			</div>";
+	cardHolder[0].innerHTML += cardData;
 }
 
 function ready() {

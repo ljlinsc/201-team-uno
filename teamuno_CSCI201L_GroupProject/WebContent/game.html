@@ -5,14 +5,9 @@
 <meta charset="ISO-8859-1">
 
 <title>Insert title here</title>
-<script src = websocket.js async></script>
-</head>
-<body>
-
+<script src ="websocket.js" async></script>
 <link href="CSS/game.css" rel="stylesheet">
 <!-- <script src="game.js" async> -->
-
-</script>
 </head>
 <body onload="connect()">
 	<h1 class="page-title">UNO</h1>
@@ -24,21 +19,25 @@
 			<div class="game-info">
 			Players: <span id="players">0</span>
 			</div>
-		</div>
-	
-		<div class="card">
-			<div class="card-back card-face">
-				<img class="uno" src="IMG/blue-0.png">
-			</div>
-			<div class="card-front card-face">
-			
+			<div class = "game-info">
+			Game Room ID: <span id="gameRoomID">1x1x1x</span>
 			</div>
 		</div>
-		<div class="card"></div>
-		<div class="card"></div>
-		<div class="card"></div>
-		<div class="card"></div>
-		<div class="card"></div>
+		<div class="cardContainer">
+			<div class="card">
+				<div class="card-back card-face">
+					<img class="uno" src="IMG/Blue_Zero.png">
+				</div>
+				<div class="card-front card-face">
+				
+				</div>
+			</div>
+			<div class="card"></div>
+			<div class="card"></div>
+			<div class="card"></div>
+			<div class="card"></div>
+			<div class="card"></div>
+		</div>
 		<button id="readyButton" onclick="ready()">Ready</button>
 		<button id="drawButton" onclick="draw()">Ready</button>
 		<button id="unoButton" onclick="uno()">Uno!</button>
