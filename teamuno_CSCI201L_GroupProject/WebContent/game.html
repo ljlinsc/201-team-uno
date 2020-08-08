@@ -5,16 +5,16 @@
 <meta charset="ISO-8859-1">
 
 <title>Insert title here</title>
-<script src = websocket.js></script>
+<script src = websocket.js async></script>
 </head>
 <body>
 
 <link href="CSS/game.css" rel="stylesheet">
-<script src="game.js" async>
+<!-- <script src="game.js" async> -->
 
 </script>
 </head>
-<body>
+<body onload="connect()">
 	<h1 class="page-title">UNO</h1>
 	<div class="game-container">
 		<div class="game-info-container">
@@ -39,6 +39,9 @@
 		<div class="card"></div>
 		<div class="card"></div>
 		<div class="card"></div>
+		<button id="readyButton" onclick="ready()">Ready</button>
+		<button id="drawButton" onclick="draw()">Ready</button>
+		<button id="unoButton" onclick="uno()">Uno!</button>
 	</div>
 </body>
 </html>

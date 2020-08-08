@@ -24,7 +24,7 @@ public class GameRoom {
 	public GameRoom(String id) {
 		this.id = id;
 		if (!rooms.containsKey(id)) {
-			rooms.put(id, new Game(id, new Vector<String>()));
+			rooms.put(id, new Game(id));
 		}
 	}
 	
@@ -37,7 +37,7 @@ public class GameRoom {
 	}
 	public void broadcastMessage(Message m) {
 		if (m.message != null) {
-			for(ServerThread threads : Players) {
+			for(Game threads : rooms.values()) {
 					threads.sendMessage(m);
 			}
 		}
@@ -54,7 +54,6 @@ public class GameRoom {
 		System.out.println("New Session for GameRoom="+id);
 		
 		// Add session to user
-		rooms.get(id, )
 		rooms.get(id).addSession(session);
 	}
 	

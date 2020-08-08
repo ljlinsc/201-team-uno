@@ -88,30 +88,61 @@
  * 
  * 
  */
-var connectionURL = "ws://localhost:8080/RoomSocket";
-class websocket{
-	constructor(){
-		this.socket = new WebSocket(connectionURL)
-		socket.onopen = function(event) {
+var connectionURL = "ws://localhost:8080/teamuno_CSCI201L_GroupProject/RoomSocket";
+class GameWebSocket{
+	constructor(URL){
+		this.socket = new WebSocket(URL);
+		this.socket.onopen = function(event) {
 			console.log("Succesfully connected to" )
 		}
-		socket.onmessage = function(event) {
-			
+		this.socket.onmessage = function(event) {
+			console.log("New Message: <"+event.data+">");
+			processMessage(event.data);
 		}
-		socket.onclose = function(event) {
+		this.socket.onclose = function(event) {
 			
 		}
 	}
 	sendMessage(message){
-		this.socket.send(message)
+		this.socket.send(message);
 	}
 	
+}
+
+var game;
+function connect() {
+	game = new GameWebSocket(connectionURL);
 }
 
 /*
 	REPONSE FORMAT FROM SERVER
 	{
-		successful : boolean,
+		"type" : String, [valid values = "error", "content-change"]
 		message : String,
 	}
 */
+function processMessage(message) {
+	var text = JSON.parse(message);
+	if (text.type === "error") {
+		alert(text.message);
+	} else if (text.type === "content-change") {
+		
+	} else {
+		console.log("from processMessage(): Could not recongnize message type " + text.type);
+		
+	}
+}
+
+function draw() {
+	console.log("draw()");
+	game.socket.send("draw");
+}
+
+function ready() {
+	console.log("ready()");
+	game.socket.send("ready");
+}
+
+function uno() {
+	game.socket.send("uno");
+}

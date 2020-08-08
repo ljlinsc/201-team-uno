@@ -11,13 +11,13 @@ import teamuno_CSCI201L_GroupProject.User;
 import teamuno_CSCI201L_GroupProject.Game;
 public class ServerRoom {
 	private Game game;
-	private Vector<User> users;
+	private Vector<User> players;
 	private String roomID;
 	public Lock userLookup;
 	
 	public ServerRoom(String roomID) {
 		this.userLookup = new ReentrantLock();
-		this.users = new Vector<User>();
+		this.players = new Vector<User>();
 		this.game = new Game(roomID, new Vector<String>());
 		this.roomID = roomID;
 

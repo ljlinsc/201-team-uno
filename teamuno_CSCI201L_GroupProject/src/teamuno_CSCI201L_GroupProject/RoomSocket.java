@@ -1,5 +1,6 @@
 package teamuno_CSCI201L_GroupProject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ import game.ServerRoom;
  * }
  * "draw"
  * {
- * 		action : "uno",
+ * 		action : "draw",
  * 		username : String,
  * 		nickname : String,
  * 		roomID : String,
@@ -124,48 +125,21 @@ public class RoomSocket {
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println(message);
-		JSONParser parser = new JSONParser();
-		JSONObject json = null;
+		
+		String errorMessage = "{"
+				+ "\"type\" : \"error\","
+				+ "\"message\" : \"TESTTEST! already exists and is in the room\""
+				+ "}";
+		
 		try {
-			json = (JSONObject)parser.parse(message);
-		} catch (ParseException e) {
+			session.getBasicRemote().sendText(errorMessage);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("could not send msg="+errorMessage);
 			e.printStackTrace();
 		}
-		//Check if message is empty
-		if(json != null) {
-			//Get action
-			String action = (String)json.get("action");
-			//Get username
-			String username = (String)json.get("username");
-			//Get nickname
-			String nickname = (String)json.get("nickname");
-			//Creating room
-			if(action.equals("createRoom")) {
-				if(!this.checkIfUserInRoom(username)) {
-					String roomID = (String)json.get("roomID");
-					Game created_room = new Game(roomID);
-					User add_user = new User(username, nickname, session);
-					created_room.addUser(add_user);
-				}
-				else {
-					//Return error
-				}
-				
-			}
-			//Joining room
-			else if(action.equals("joinRoom")) {
-				String roomID = (String)json.get("roomID");
-				Game join_room = this.getRoomByID(roomID);
-				User add_user = new User(username, nickname, session);	
-				join_room.addUser(add_user);
-			}
-			//Player taking turn
-			else {
-				String roomID = (String)json.get("roomID");
-				Game player_room = this.getRoomByID(roomID);
-				player_room.processRequest(message);
-			}
-		}
+		
+	
 	}
 	
 	@OnClose

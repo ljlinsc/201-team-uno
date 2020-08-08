@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import game.Card;
 import game.Deck;
+import teamuno_CSCI201L_GroupProject.Game;
 
 public class ServerThread implements Runnable {
 	private String username;
@@ -18,10 +19,10 @@ public class ServerThread implements Runnable {
 	private Game game;
 	
 	
-	public ServerThread(String username, GameRoom gr, Socket s) {
+	public ServerThread(String username, Game gr, Socket s) {
 		try {
 			this.username = username;
-			this.gr = gr;
+			this.game = gr;
 			ois = new ObjectInputStream(s.getInputStream());
 			oos = new ObjectOutputStream(s.getOutputStream());
 		} catch (IOException e) {

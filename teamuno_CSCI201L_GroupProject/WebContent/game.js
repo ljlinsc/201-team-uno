@@ -4,12 +4,6 @@ if (document.readyState === 'loading') {
 	ready();
 }
 
-var socket;
-
-function connectToServer() {
-	socket = new WebSocket("ws://localhost:8080/Game");
-}
-
 class AudioController {
 	constructor() {
 		this.bgMusic = new Audio('AUDIO/game.mp3');
@@ -37,29 +31,29 @@ class AudioController {
 	}
 }
 
-class Uno {
-	constructor(startTime, cards) {
-		this.cardsArray = cards;
-		this.time = startTime;
-		this.cardToCheck = null;
-	}
-	
-	startGame() {
-		
-	}
-}
+//class Uno {
+//	constructor(startTime, cards) {
+//		this.cardsArray = cards;
+//		this.time = startTime;
+//		this.cardToCheck = null;
+//	}
+//	
+//	startGame() {
+//		
+//	}
+//}
 
-function ready() {
-	let cards = Array.from(document.getElementsByClassName('card'));
-	
-	cards.forEach(card => {
-		card.addEventListener('click', () => {
-			// REMOVE CARD HERE
-			game.remove(card);
-		})
-	});
-	
-	
-}
+//function ready() {
+//	let cards = Array.from(document.getElementsByClassName('card'));
+//	
+//	cards.forEach(card => {
+//		card.addEventListener('click', () => {
+//			// REMOVE CARD HERE
+//			game.remove(card);
+//		})
+//	});
+//	
+//	
+//}
 
 let audioController = new AudioController();
