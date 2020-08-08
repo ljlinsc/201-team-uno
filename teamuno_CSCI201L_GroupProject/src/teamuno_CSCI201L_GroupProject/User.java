@@ -10,6 +10,7 @@ import game.Card;
 public class User {
 	private String username;
 	private String nickname;
+	private String roomID = null;
 	private Session comm;
 	private List<Card> player_hand;
 	private boolean registered;
@@ -32,7 +33,9 @@ public class User {
 		this.comm = comm;
 		this.isReady = false;
 	}
-	
+	public void setRoomID(String ID) {
+		this.roomID = ID;
+	}
 	public String getUsername() {
 		return username;
 	}

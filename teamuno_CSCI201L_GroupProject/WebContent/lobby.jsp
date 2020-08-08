@@ -38,6 +38,7 @@
 					<input class="submit" type="submit" name="game-code-submit" value="Enter" />
 				</form>
 			</div>
+			<b>${message}</b>
 		</div>
 	</div>
 </body>

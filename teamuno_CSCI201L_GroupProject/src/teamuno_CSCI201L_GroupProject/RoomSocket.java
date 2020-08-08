@@ -60,10 +60,14 @@ import game.ServerRoom;
  * 		roomID: String,
  * 		card: Integer,
  * 		color: String,
+ * 		endTurn: boolean
  * }
  * This will make the user turn, and then broadcast to all other users the result of the action.
  **********************************************************************************************
  * Uno card notation format:
+ * Draw Card:
+ * 		card: 0
+ * 		color: null
  * Regular Cards:
  * 		card: 1-9 (depending on value of card)
  * 		color: color of card
@@ -85,8 +89,7 @@ import game.ServerRoom;
  */
 
 @ServerEndpoint(value = "/RoomSocket")
-public class RoomSocket extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class RoomSocket {
 	private static List<ServerRoom> rooms = Collections.synchronizedList(new ArrayList<ServerRoom>());
 	@OnOpen
 	public void open(Session session) {
@@ -127,7 +130,7 @@ public class RoomSocket extends HttpServlet {
 			}
 			else if (action.equals("makeTurn")) {
 				String roomID = (String)json.get("roomID");
-				ServerRoom join_room = this.getRoomByID(roomID);
+				ServerRoom player_room = this.getRoomByID(roomID);
 			}
 		}
 	}
