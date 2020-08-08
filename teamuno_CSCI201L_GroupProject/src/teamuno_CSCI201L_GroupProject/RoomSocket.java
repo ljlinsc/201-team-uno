@@ -106,10 +106,15 @@ public class RoomSocket {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		//Check if message is empty
 		if(json != null) {
+			//Get action
 			String action = (String)json.get("action");
+			//Get username
 			String username = (String)json.get("username");
+			//Get nickname
 			String nickname = (String)json.get("nickname");
+			//Creating room
 			if(action.equals("createRoom")) {
 				if(!this.checkIfUserInRoom(username)) {
 					String roomID = (String)json.get("roomID");
@@ -122,12 +127,14 @@ public class RoomSocket {
 				}
 				
 			}
+			//Joining room
 			else if(action.equals("joinRoom")) {
 				String roomID = (String)json.get("roomID");
 				ServerRoom join_room = this.getRoomByID(roomID);
 				User add_user = new User(username, nickname, session);	
 				join_room.addUser(add_user);
 			}
+			//Player taking turn
 			else if (action.equals("makeTurn")) {
 				String roomID = (String)json.get("roomID");
 				ServerRoom player_room = this.getRoomByID(roomID);
