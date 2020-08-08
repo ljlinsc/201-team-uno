@@ -67,6 +67,15 @@ input:focus, select:focus, textarea:focus, button:focus {
 	float: left;
 }
 
+.subheader {
+	margin: 0px;
+	margin-left: 10px;
+	font-size: 16px;
+	font-family: "Varta";
+	font-weight: 600;
+	float: left;
+}
+
 .invalid {
 	font-style: italic;
 	font-size: 18px;
@@ -196,4 +205,12 @@ input:focus, select:focus, textarea:focus, button:focus {
 	margin-bottom: 5px;
 	width: 100%;
 	height: 5px;
+}
+
+.game-room-info {
+	width: 100px;
+}
+
+.game-room-info ul {
+	list-style-type: none;
 }

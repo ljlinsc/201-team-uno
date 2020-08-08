@@ -12,12 +12,22 @@
 <title>201 UNO</title>
 </head>
 <body>
+	<!-- need to connect this page to the server to keep clients updated -->
+	<div class="game-room-info">
+		<div class="header" style="width:100px;">Code: ###</div>
+		<div class="subheader" style="width:100px;">Players: </div>
+		<ul>
+			<li>###</li>
+			<li>###</li>
+			<li>###</li>
+			<li>###</li>
+			<li>###</li>
+		</ul>
+	</div>
 	<div class="lobby-wrapper">
 		<div class="greeting">
 			<h1>You've entered the game room, ${user.getNickname()}</h1>
 			<h1>Currently waiting for other players . . .</h1>
-			<!-- maybe I should list the name of players that have joined the game as well? -->
-			<!-- and maybe we should display # of players needed to start the game? -->
 		</div>
 		
 	</div>
