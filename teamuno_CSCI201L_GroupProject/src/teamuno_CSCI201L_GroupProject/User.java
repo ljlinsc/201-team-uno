@@ -8,14 +8,15 @@ import javax.websocket.Session;
 import game.Card;
 
 public class User {
-	private String username;
-	private String nickname;
+	private String username; // Used as ID for Registered Users
+	private String nickname; // Used as ID for Not Registered Users
 	private String roomID = null;
 	private Session comm;
-	private List<Card> player_hand;
 	private boolean registered;
 	private boolean isReady;
 	
+	// username will be used as the ID in the game (if registered)
+	// otherwise, nickname (for guests)
 	public User(String username, String nickname, boolean registered) {
 		this.username = username;
 		this.nickname = nickname;
@@ -24,7 +25,7 @@ public class User {
 	public User(String username, String nickname, Session comm) {
 		this.setUsername(username);
 		this.setNickname(nickname);
-		if (username== null) {
+		if (username == null) {
 			this.registered = false;
 		}
 		else {
@@ -74,5 +75,10 @@ public class User {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/* Setter Functions */
+	public void setSession(Session session) {
+		this.comm = session;
 	}
 }

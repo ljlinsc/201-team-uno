@@ -10,6 +10,7 @@
  * 		action : "createRoom"
  * 		action : "joinRoom"
  * 		action : "makeTurn"
+ * 		action : "uno"
  **********************************************************************************************
  * Based on the action determines the server response:
  * "createRoom"
@@ -42,6 +43,23 @@
  * }
  * This will make the user turn, and then broadcast to all other users the result of the action.
  **********************************************************************************************
+ * "uno"
+ * {
+ * 		action : "uno"
+ * 		username : Stirng,
+ * 		nickname : String,
+ * 		roomID : String,
+ * }
+ * 
+ * "draw" 
+ * {
+ * 		action : draw",
+ *		username: String,
+ *		nickname: String,
+ *		roomOD: String
+ * }
+  * This will make the user turn, and then broadcast to all other users the result of the action.
+ **********************************************************************************************
  * Uno card notation format:
  * Draw Card:
  * 		card: 0
@@ -70,11 +88,12 @@
  * 
  * 
  */
+var connectionURL = "ws://localhost:8080/RoomSocket";
 class websocket{
 	constructor(){
-		this.socket = new WebSocket("ws://localhost:8080/RoomSocket")
+		this.socket = new WebSocket(connectionURL)
 		socket.onopen = function(event) {
-			
+			console.log("Succesfully connected to" )
 		}
 		socket.onmessage = function(event) {
 			
@@ -88,3 +107,11 @@ class websocket{
 	}
 	
 }
+
+/*
+	REPONSE FORMAT FROM SERVER
+	{
+		successful : boolean,
+		message : String,
+	}
+*/

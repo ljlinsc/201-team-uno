@@ -3,30 +3,27 @@ package game;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import teamuno_CSCI201L_GroupProject.User;
-
+import teamuno_CSCI201L_GroupProject.Game;
 public class ServerRoom {
-	private List<User> players;
-	private Deck deck;
-	private String curr_color;
-	public String roomID;
-	public Lock userLookup = new ReentrantLock();
+	private Game game;
+	private Vector<User> users;
+	private String roomID;
+	public Lock userLookup;
+	
 	public ServerRoom(String roomID) {
+		this.userLookup = new ReentrantLock();
+		this.users = new Vector<User>();
+		this.game = new Game(roomID, new Vector<String>());
 		this.roomID = roomID;
-		this.deck = new Deck();
-		this.players = Collections.synchronizedList(new ArrayList<User>());
+
 	}
 	public void addUser(User user) {
-		this.players.add(user);
-	}
-	public String getCurrentColor() {
-		return this.curr_color;
-	}
-	public void setCurrentColor(String color) {
-		this.curr_color = color;
+		this.game.add(user);
 	}
 	public User getUserByUsername(String username) {
 		this.userLookup.lock();

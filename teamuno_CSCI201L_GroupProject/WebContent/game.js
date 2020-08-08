@@ -4,6 +4,12 @@ if (document.readyState === 'loading') {
 	ready();
 }
 
+var socket;
+
+function connectToServer() {
+	socket = new WebSocket("ws://localhost:8080/Game");
+}
+
 class AudioController {
 	constructor() {
 		this.bgMusic = new Audio('AUDIO/game.mp3');
