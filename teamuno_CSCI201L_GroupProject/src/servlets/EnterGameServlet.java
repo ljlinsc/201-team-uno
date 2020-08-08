@@ -1,4 +1,4 @@
-package teamuno_CSCI201L_GroupProject.servlet;
+package servlets;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -39,17 +39,17 @@ public class EnterGameServlet extends HttpServlet {
 		if(usr.isRegistered() && allRoomID.contains(msg)) {
 			roomID = msg;
 			usr.setRoomID(roomID);
-			next_page = "/game.html";
+			next_page = "/waiting.jsp";
 		}
 		else if(usr.isRegistered() && msg == null) {
 			roomID = generateHex();
 			usr.setRoomID(roomID);
-			next_page = "/game.html";
+			next_page = "/waiting.jsp";
 		}
 		else if (allRoomID.contains(msg)) {
 			roomID = msg;
 			usr.setRoomID(msg);
-			next_page = "/game.html";
+			next_page = "/waiting.jsp";
 		}
 		else {
 			request.setAttribute("message", "Error game room code invalid.");

@@ -1,4 +1,4 @@
-package teamuno_CSCI201L_GroupProject.servlet;
+package servlets;
 
 import java.io.IOException;
 

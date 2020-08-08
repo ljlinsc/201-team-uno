@@ -1,4 +1,4 @@
-package teamuno_CSCI201L_GroupProject.servlet;
+package servlets;
 
 import java.io.IOException;
 
@@ -13,21 +13,17 @@ import javax.servlet.http.HttpSession;
 import teamuno_CSCI201L_GroupProject.JDBC_Core;
 import teamuno_CSCI201L_GroupProject.User;
 
-/**
- * Servlet implementation class CreateUserServlet
- */
-@WebServlet("/CreateUserServlet")
-public class CreateUserServlet extends HttpServlet {
+@WebServlet("/SignInServlet")
+public class SignInServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+       
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		String nickname = request.getParameter("nickname");
-		String next = "/newuser.jsp";
+		String next = "/index.jsp";
 		User user = null;
 		try {
-			user = JDBC_Core.createUser(username, password, nickname);
+			user = JDBC_Core.verifySignIn(username, password);
 		} catch (ClassNotFoundException e1) {
 			System.out.println("Error while retrieving the user information.");
 		}
@@ -36,7 +32,7 @@ public class CreateUserServlet extends HttpServlet {
 			session.setAttribute("user", user);
 			next = "/lobby.jsp";
 		}
-		request.setAttribute("message", "username already taken");
+		request.setAttribute("message", "invalid user/pass");
 		RequestDispatcher dispatch = getServletContext().getRequestDispatcher(next);
 		dispatch.forward(request, response);
 	}
