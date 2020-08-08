@@ -114,4 +114,36 @@ public class Game {
 	{
 		return getPlayerHand(id).isEmpty();
 	}
+	
+	public boolean isValidCardPlay(UnoCard card) {
+		return card.getColor() == validColor || card.getValue() == validValue;
+	}
+	
+	public void checkPlayerTurn(String pid) throws IllegalArgumentException {
+		if (this.playerIDs.get(this.currentPlayer) != pid) {
+			throw new IllegalArgumentException("Not player " + pid + "'s turn + [playerID="+ pid + "]");
+		}
+	}
+	public void submitDraw(String pid) throws IllegalArgumentException {
+		checkPlayerTurn(pid);
+		
+		if (deck.isEmpty()) {
+			deck.replaceDeckWith(stockPile);
+		}
+		
+		getPlayerHand(pid).add(deck.drawCard());
+		if (!gameDirection) {
+              currentPlayer = (currentPlayer + 1)%playerIDs.size();
+		} else if(gameDirection) {
+			if (currentPlayer == 0) {
+				currentPlayer = playerIDs.size() - 1;
+			} else {
+				currentPlayer--;
+			}
+		}
+	}
+	
+	public void setCardColor(UnoCard.Color color) {
+		validColor = color;
+	}
 }
