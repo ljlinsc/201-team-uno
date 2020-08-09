@@ -119,17 +119,18 @@ public class RoomSocket {
 	
 	@OnOpen
 	public void open(Session session) {
+		if (rooms.isEmpty()) {
+			rooms.put("1x1x1x", new Game("1x1x1x"));
+		}
+		
 		System.out.println("Connection made!");
+		
 	}
 	
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println(message);
-		
-		String errorMessage = "{"
-				+ "\"type\" : \"error\","
-				+ "\"message\" : \"TESTTEST! already exists and is in the room\""
-				+ "}";
+
 		String cardData = "<div class=\"card\">\n" + 
 				"				<div class=\"card-back card-face\">\n" + 
 				"					<img class=\"uno\" src=\"IMG/Blue_Zero.png\">\n" + 
@@ -145,13 +146,92 @@ public class RoomSocket {
 				+ "\"contentChangeType\" : \"addCard\""
 				+ "}";
 		
-		
+		JSONParser parser = new JSONParser();
+		JSONObject json = null;
 		try {
-			session.getBasicRemote().sendText(addMessage);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("could not send msg="+addMessage);
+			json = (JSONObject)parser.parse(message);
+		} catch (ParseException e) {
+			System.out.println("RoomSocket: Was unable to parse JSON in on Message");
 			e.printStackTrace();
+		}
+		//Check if message is empty
+		if(json != null) {
+			//Get action
+			String action = (String)json.get("action");
+			//Get username
+			String username = (String)json.get("username");
+			//Get nickname
+			String nickname = (String)json.get("nickname");
+			//Creating room
+			if(action.equals("createRoom")) {
+				String roomID = (String)json.get("roomID");
+				if(!rooms.containsKey(roomID) && !this.checkIfUserInRoom(username)) {
+					Game created_room = new Game(roomID);
+					User add_user = new User(username, nickname, session);
+					created_room.addUser(add_user);
+				}
+				else {
+					//Return error
+					String errorMessage;
+					if (rooms.containsKey(roomID) && this.checkIfUserInRoom(username) {
+						errorMessage = "{"
+								+ "\"type\" : \"error\""
+								+ "\"message\" : \"Room already exists and is in the room\""
+								+ "}";
+					}	
+					else if (rooms.containsKey(roomID)) {
+						errorMessage = "{"
+								+ "\"type\" : \"error\""
+								+ "\"message\" : \"Room already exists\""
+								+ "}";
+					} else {
+						errorMessage = "{"
+								+ "\"type\" : \"error\""
+								+ "\"message\" : \"User already in roo\""
+								+ "}";
+					}
+					session.getBasicRemote().sendText(errorMessage);
+				}
+				
+			}
+			//Joining room
+			else if(action.equals("joinRoom")) {
+				String roomID = (String)json.get("roomID");
+				Game join_room = this.getRoomByID(roomID);
+				// Cannot join game that is running
+				if (join_room.isRunning()) {
+					String error = "{"
+							+ "\"type\" : \"error\""
+							+ "\"message\" : \"Cannot join game, it already started\""
+							+ "}";
+					session.getBasicRemote().sendText(error);
+				} 
+				// Cannot join game with max num players
+				else if (join_room.getUserCount() > 5) {
+					String error = "{"
+							+ "\"type\" : \"error\""
+							+ "\"message\" : \"Game cannot have more than 5 players\""
+							+ "}";
+					session.getBasicRemote().sendText(error);
+				}
+				else {
+					User add_user = new User(username, nickname, session);	
+					join_room.addUser(add_user);					
+				}
+			}
+			//Player taking turn
+			else {
+				String roomID = (String)json.get("roomID");
+				Game player_room = this.getRoomByID(roomID);
+				if (player_room.isRunning()) {
+					player_room.processRequest(message);					
+				} else {
+					String errorMessage = "{"
+							+ "\"type\" : \"error\""
+							+ "\"message\" : \"Game is not running\""
+							+ "}";
+				}
+			}
 		}
 		
 	

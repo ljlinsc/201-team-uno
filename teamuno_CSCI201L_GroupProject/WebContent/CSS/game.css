@@ -41,6 +41,10 @@ body {
 	justify-content: center;
 }
 
+.cardContainer {
+	
+}
+
 .card {
 	position: relative;
 	background-color: black;

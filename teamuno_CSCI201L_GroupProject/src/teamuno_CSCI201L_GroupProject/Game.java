@@ -1,5 +1,6 @@
 package teamuno_CSCI201L_GroupProject;
 
+import java.io.IOException;
 import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -34,6 +35,7 @@ public class Game {
 	public Lock userLookup;
 	
 	public Game(String id) {
+		System.out.println("Game (ID="+id+") creating new game");
 		this.players = new Vector<User>();
 		this.running = false;
 		this.gameID = id;
@@ -47,6 +49,7 @@ public class Game {
 		this.userLookup = new ReentrantLock();
 		
 		this.sessions = new Vector<Session>();
+		System.out.println("Game (ID="+id+") sucessfully created new game");
 	}
 	
 	public boolean isRunning() {
@@ -176,6 +179,7 @@ public class Game {
 		
 		
 		// Update all other users on info
+		
 		return "";
 	}
 	
@@ -195,6 +199,7 @@ public class Game {
 		String requestSentBy = null;
 		String message = null;
 		String gameDirection = null;
+		String cardToRemove = null;
 		
 		if (color != UnoCard.Color.Wild) {
 			
@@ -228,6 +233,7 @@ public class Game {
 			}
 			
 			
+			cardToRemove = new UnoCard(color, value).toString();
 			requestSentBy = userID;
 			message = "Player " + userID + " put down card";// doesnt specify which one
 			topCard = new UnoCard(validColor, validValue).toString();
@@ -235,11 +241,14 @@ public class Game {
 		}
 		
 		return "{"
+				+ "\"type\" : \"content-change\","
+				+ "\"contentChangeType\" : \"addCard\""
 				+ "\"topCard\" : " + topCard + ","
 				+ "\"nextPlayer\" : " + nextPlayer + ","
 				+ "\"requestSentBy\" : " + requestSentBy + ","
 				+ "\"message\" : " + message + ","
-				+ "\"gameDirection\" : " + gameDirection
+				+ "\"gameDirection\" : " + gameDirection + ","
+				+ "\"cardToRemoveID\" : " + cardToRemove
 				+ "}";
 		
 	}
@@ -247,10 +256,24 @@ public class Game {
 	// Currently does not work with wild cards
 	public String uno(String userID, UnoCard.Color color, UnoCard.Value value) {
 		if (this.getPlayerHand(userID).size() == 1) {
-			return ""; // Sucess
+			String wonGame;
+			return wonGame; // Sucess
+		}
+		String errorMessage = "{"
+				+ "\"type\" : \"error\","
+				+ "\"message\" : \"You have " + this.getPlayerHand(userID).size() + "cards left\""
+				+ "}";
+		// Send message to userplayerID
+		int index = playerIDs.indexOf(userID);
+		try {
+			sessions.get(index).getBasicRemote().sendText(errorMessage);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Game (id="roomID+") could not send error message for uno to player="+userID);
+			e.printStackTrace();
 		}
 		
-		return ""; // Error
+		return null; // Error
 	}
 	
 	public void processRequest(String json) {
@@ -359,7 +382,9 @@ public class Game {
 	public void setUserReady(String nickname) {
 		User usr = this.getUserByNickname(nickname);
 		usr.playerReady();
-		
+		if (allReady()) {
+			running = true;
+		}
 	}
 
 	private void broadcastMessage(String message) {

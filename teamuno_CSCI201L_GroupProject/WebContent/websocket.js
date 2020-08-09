@@ -112,6 +112,23 @@ class GameWebSocket{
 var game;
 function connect() {
 	game = new GameWebSocket(connectionURL);
+	
+	// Game ID is embedded in HTML
+	var gameID = document.getElementById("gameRoomID").innerHTML;
+	
+	// Connect to Game using gameID
+	joinGame(gameID);
+	
+}
+
+function joinGame(gameID) {
+	var joinInstructions = {
+			"action" : "joinRoom",
+			"username" : "jargote",
+			"nickname" : "jarjarbinks",
+			"roomID" : gameID
+	}
+	game.sendMessage(JSON.stringify(joinInstructions));
 }
 
 /*
@@ -119,7 +136,12 @@ function connect() {
 	{
 		"type" : String, [valid values = "error", "content-change"]
 		message : String,
-		"contentChangeType" : "addCard";
+		"contentChangeType" : "addCard" "changeTopCard" "drawCard"
+	}
+	// When a user puts down a card successfully
+	// Send to all users
+	{
+	
 	}
 */
 function processMessage(message) {
@@ -128,8 +150,12 @@ function processMessage(message) {
 		alert(text.message);
 	} else if (text.type === "content-change") {
 		if (text.contentChangeType === "addCard") {
-			addCard(text.message);
-		} 
+			addCard(text);
+		} else if (text.contentChangeType === "changeTopCard") {
+			changeTopCard(text.message);
+		} else if (contentChangeType === "drawCard") {
+			addCardToHand(text);
+		}
 	} else {
 		console.log("from processMessage(): Could not recongnize message type " + text.type);
 		
@@ -148,17 +174,67 @@ function draw() {
 }
 
 function addCard(HTMLData) {
-	var cardHolder = document.getElementsByClassName("cardContainer");
+	var cardHolder = document.getElementsByClassName("game-container");
+	
+	var topCard = HTMLData.topCard;
+	var nextPlayer = HTMLData.nextPlayer;
+	var requestSentBy = HTMLData.requestSentBy;
+	var gameDirection = HTMLData.gameDirection;
+	var cardToRemove = HTMLData.cardToRemove;
+	
+	var playerID = document.getElementById("playerID").innerHTML;
+	
+	// Remove card from the player that put down that card on Screen
+	if (playerID === requestSentBy) {
+		cardsWithClassName = document.getElementsByClassName(cardToRemove);
+		cardsWithClassName[0].remove(cardsWithClassName[0].selectedIndex);
+	}
+	
+	// Update next player on Screen
+	document.getElementById("currentPlayer").innerHTML = nextPlayer;
+	
+	// Change Top Card
+	changeTopCard(topCard);
+}
+
+
+function changeTopCard(topCardName) {
+	var cardHolder = document.getElementsByClassName("game-container");
 	var cardData = "<div class=\"card\">" +
 	"<div class=\"card\">\n" + 
 	"				<div class=\"card-back card-face\">\n" + 
-	"					<img class=\"uno\" src=\"IMG/" + HTMLData + "\">\n" + 
+	"					<img class=\"uno\" src=\"IMG/" + topCardName + "\">\n" + 
 	"				</div>\n" + 
 	"				<div class=\"card-front card-face\">\n" + 
 	"				\n" + 
 	"				</div>\n" + 
 	"			</div>";
-	cardHolder[0].innerHTML += cardData;
+	cardHolder[0].innerHTML = cardData;
+}
+
+// drawCard Callback Function (info From Server)
+function addCardToHand(JSONData) {
+	var nextPlayer = JSONData.nextPlayer;
+	var requestSentBy = JSONData.requestSentBy;
+	var cardToAdd = HTMLData.message;
+	var cardData = "<div class=\"card\">" +
+	"<div class=\"card\">\n" + 
+	"				<div class=\"card-back card-face\">\n" + 
+	"					<img class=\"uno\" src=\"IMG/" + cardToAdd + "\">\n" + 
+	"				</div>\n" + 
+	"				<div class=\"card-front card-face\">\n" + 
+	"				\n" + 
+	"				</div>\n" + 
+	"			</div>";
+	var playerID = document.getElementById("playerID").innerHTML;
+
+	// Update next player on Screen
+	document.getElementById("currentPlayer").innerHTML = nextPlayer;
+	
+	// Update Card Hand for Player that sent request
+	if (playerID === requestSentBy) {
+		cardHolder[1].innerHTML += cardData;		
+	}
 }
 
 function ready() {

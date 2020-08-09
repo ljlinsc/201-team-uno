@@ -12,6 +12,21 @@
 <body onload="connect()">
 	<h1 class="page-title">UNO</h1>
 	<div class="game-container">
+		<div class="card">
+			<div class="card-back card-face">
+					<img class="uno" id="topCard" src="IMG/Blue_Zero.png">
+				</div>
+		</div>
+	</div>
+	<div class="game-container">
+		<div class="game-info-container">
+			<div class="game-info">
+				PlayerID <span id="playerID">jargote</span>
+			</div>
+			<div class="game-info">
+				PlayerID <span id="currentPlayer">jargote</span>
+			</div>
+		</div>
 		<div class="game-info-container">
 			<div class="game-info">
 				Time <span id="time">0</span>
@@ -23,7 +38,6 @@
 			Game Room ID: <span id="gameRoomID">1x1x1x</span>
 			</div>
 		</div>
-		<div class="cardContainer">
 			<div class="card">
 				<div class="card-back card-face">
 					<img class="uno" src="IMG/Blue_Zero.png">
@@ -32,14 +46,11 @@
 				
 				</div>
 			</div>
-			<div class="card"></div>
-			<div class="card"></div>
-			<div class="card"></div>
-			<div class="card"></div>
-			<div class="card"></div>
-		</div>
-		<button id="readyButton" onclick="ready()">Ready</button>
-		<button id="drawButton" onclick="draw()">Ready</button>
+
+	</div>
+	<div class="game-container">
+	<button id="readyButton" onclick="ready()">Ready</button>
+		<button id="drawButton" onclick="draw()">Draw</button>
 		<button id="unoButton" onclick="uno()">Uno!</button>
 	</div>
 </body>
