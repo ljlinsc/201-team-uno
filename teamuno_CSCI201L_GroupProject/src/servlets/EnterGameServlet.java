@@ -36,20 +36,21 @@ public class EnterGameServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User usr = (User) session.getAttribute("user");
 		String next_page;
-		if(usr.isRegistered() && allRoomID.contains(msg)) {
+		if(allRoomID.contains(msg)) { // Registered or unregistered users can enter game
 			roomID = msg;
 			usr.setRoomID(roomID);
-			next_page = "/game.html";
+			
+			next_page = "/game.jsp?roomID="+roomID;
 		}
-		else if(usr.isRegistered() && msg == null) {
-			roomID = generateHex();
+		else if(usr.isRegistered() && msg == null) { // Creating new room here?
+			roomID = generateHex(); // Is this gauranteed to be unique?
 			usr.setRoomID(roomID);
-			next_page = "/game.html";
+			next_page = "/game.jsp?roomID="+roomID;
 		}
 		else if (allRoomID.contains(msg)) {
 			roomID = msg;
 			usr.setRoomID(msg);
-			next_page = "/game.html";
+			next_page = "/game.jsp?roomID="+roomID;
 		}
 		else {
 			request.setAttribute("message", "Error game room code invalid.");

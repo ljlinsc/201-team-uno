@@ -21,7 +21,7 @@
 				<c:choose>
 					<c:when test="${user.isRegistered()}">
 						<form name="create-game-room" method="POST"
-							action="CreateGameServlet">
+							action="game.jsp?createGame=true">
 							<input class="yellow-button" style="width: 280px" type="submit"
 								name="create-game" value="Create a new game" />
 						</form>

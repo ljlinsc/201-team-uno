@@ -18,9 +18,11 @@ import teamuno_CSCI201L_GroupProject.User;
 @WebServlet("/GuestServlet")
 public class GuestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static int numGuests = 0;
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User user = new User("guest", "guest", false);
+		User user = new User("guest" + numGuests, "guest" + numGuests, false);
+		numGuests++;
 		HttpSession session = request.getSession();
 		session.setAttribute("user", user);
 		RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/lobby.jsp");

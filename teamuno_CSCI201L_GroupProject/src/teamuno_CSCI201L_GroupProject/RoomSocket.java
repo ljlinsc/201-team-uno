@@ -117,6 +117,13 @@ import game.ServerRoom;
 public class RoomSocket {
 	private static HashMap<String, Game> rooms = new HashMap<String, Game>();
 	
+	public static void addNewRoom(String id) {
+		rooms.put(id, new Game(id));
+	}
+	
+	public static boolean roomsExists(String id) {
+		return rooms.containsKey(id);
+	}
 	@OnOpen
 	public void open(Session session) {
 		if (rooms.isEmpty()) {

@@ -8,12 +8,31 @@
 <script src="websocket.js" async></script>
 <!-- <script src="game.js" async> -->
 </head>
+<%
+teamuno_CSCI201L_GroupProject.User user = (teamuno_CSCI201L_GroupProject.User) session.getAttribute("user");
+String theRoomID = (String) request.getParameter("roomID");
+String createGame = (String) request.getParameter("createGame");
+
+// Create New Room
+if (createGame != null && createGame.equals("true")) {
+	java.util.Random rand = new java.util.Random();
+	int randomInt = rand.nextInt();
+	String Hexa = Integer.toHexString(randomInt);
+	while(teamuno_CSCI201L_GroupProject.RoomSocket.roomsExists(Hexa))
+	{
+		randomInt = rand.nextInt();
+		Hexa = Integer.toHexString(randomInt);
+	}
+	teamuno_CSCI201L_GroupProject.RoomSocket.addNewRoom(Hexa);
+	theRoomID = Hexa;
+}
+%>
 <body onload="connect()">
 	<!-- Contains all of the information about the game -->
 	<div class="game-info-container">
 		<h1 class="page-title">UNO</h1>
 		<div class="game-info">
-			Game Room ID: <span id="gameRoomID">1x1x1x</span>
+			Game Room ID: <span id="gameRoomID"><%=theRoomID%></span>
 		</div>
 		<!-- Do we need this? <div class="game-info">
 			Time: <span id="time">0</span>
@@ -23,7 +42,7 @@
 		</div>
 		<div class="game-info-players">
 			<div class="game-info">
-				<span id="playerID">jargote</span>
+				<span id="playerID"><%=user.getUsername()%></span>
 			</div>
 			<div class="game-info">
 				<span id="currentPlayer">jargote</span>
