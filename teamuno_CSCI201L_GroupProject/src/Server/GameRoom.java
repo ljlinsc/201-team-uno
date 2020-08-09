@@ -12,6 +12,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 @ServerEndpoint(value="/game")
 public class GameRoom {
@@ -38,13 +39,13 @@ public class GameRoom {
 	public void broadcastMessage(Message m) {
 		if (m.message != null) {
 			for(Game threads : rooms.values()) {
-					threads.sendMessage(m);
+//					threads.sendMessage(m);
 			}
 		}
 	}
 	public void broadcastTurn() {
 		Message m = new Message();
-		m.turn = Turns.poll().getUserName(); // get the first player in the turn queue
+//		m.turn = Turns.poll().getUserName(); // get the first player in the turn queue
 		m.message = "it is " + m.turn + "'s turn.";
 	}
 	
@@ -60,23 +61,31 @@ public class GameRoom {
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		JSONParser parser = new JSONParser();
-		JSONObject parsedMessage = (JSONObject) parser.parse(message);
-		String action = null;
-		String userID = null;
-		String roomID = null;
-		String cardColor = null;
-		String cardValue = null;
-		String nickname = null;
-		
-		action = (String) parsedMessage.get("action");
-		userID = (String) parsedMessage.get("username");
-		roomID  = (String) parsedMessage.get("roomID");
-		cardColor = (String) parsedMessage.get("color");
-		cardValue = (String) parsedMessage.get("card");
-		nickname = (String) parsedMessage.get("nickname");
-		
-		Game game = rooms.get(roomID);
-		game.addAction(action, userID, cardColor, cardValue);
+		JSONObject parsedMessage = null;
+		try {
+			parsedMessage = (JSONObject) parser.parse(message);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (parsedMessage != null) {
+			String action = null;
+			String userID = null;
+			String roomID = null;
+			String cardColor = null;
+			String cardValue = null;
+			String nickname = null;
+			
+			action = (String) parsedMessage.get("action");
+			userID = (String) parsedMessage.get("username");
+			roomID  = (String) parsedMessage.get("roomID");
+			cardColor = (String) parsedMessage.get("color");
+			cardValue = (String) parsedMessage.get("card");
+			nickname = (String) parsedMessage.get("nickname");
+			
+			Game game = rooms.get(roomID);
+//			game.addAction(action, userID, cardColor, cardValue);
+		}
 	}
 
 }
