@@ -151,7 +151,7 @@ public class RoomSocket {
 		try {
 			json = (JSONObject)parser.parse(message);
 		} catch (ParseException e) {
-			System.out.println("RoomSocket: Was unable to parse JSON in on Message");
+			System.out.println("RoomSocket: Was unable to parse JSON in on Message " + message);
 			e.printStackTrace();
 		}
 		//Check if message is empty
@@ -162,9 +162,12 @@ public class RoomSocket {
 			String username = (String)json.get("username");
 			//Get nickname
 			String nickname = (String)json.get("nickname");
+			String roomID = (String)json.get("roomID");
+			Game player_room = this.getRoomByID(roomID);
+
+			
 			//Creating room
 			if(action.equals("createRoom")) {
-				String roomID = (String)json.get("roomID");
 				if(!rooms.containsKey(roomID) && !this.checkIfUserInRoom(username)) {
 					Game created_room = new Game(roomID);
 					User add_user = new User(username, nickname, session);
@@ -173,7 +176,7 @@ public class RoomSocket {
 				else {
 					//Return error
 					String errorMessage;
-					if (rooms.containsKey(roomID) && this.checkIfUserInRoom(username) {
+					if (rooms.containsKey(roomID) && this.checkIfUserInRoom(username)) {
 						errorMessage = "{"
 								+ "\"type\" : \"error\""
 								+ "\"message\" : \"Room already exists and is in the room\""
@@ -190,40 +193,70 @@ public class RoomSocket {
 								+ "\"message\" : \"User already in roo\""
 								+ "}";
 					}
-					session.getBasicRemote().sendText(errorMessage);
+					try {
+						session.getBasicRemote().sendText(errorMessage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						System.out.println("RoomSocket: Could not send message " + errorMessage);
+						e.printStackTrace();
+					}
 				}
 				
 			}
 			//Joining room
 			else if(action.equals("joinRoom")) {
-				String roomID = (String)json.get("roomID");
+				roomID = (String)json.get("roomID");
 				Game join_room = this.getRoomByID(roomID);
 				// Cannot join game that is running
 				if (join_room.isRunning()) {
 					String error = "{"
-							+ "\"type\" : \"error\""
+							+ "\"type\" : \"error\","
 							+ "\"message\" : \"Cannot join game, it already started\""
 							+ "}";
-					session.getBasicRemote().sendText(error);
+					try {
+						session.getBasicRemote().sendText(error);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						System.out.println("RoomSocket: Could not send message " + error);
+						e.printStackTrace();
+					}
 				} 
 				// Cannot join game with max num players
 				else if (join_room.getUserCount() > 5) {
 					String error = "{"
-							+ "\"type\" : \"error\""
+							+ "\"type\" : \"error\","
 							+ "\"message\" : \"Game cannot have more than 5 players\""
 							+ "}";
-					session.getBasicRemote().sendText(error);
+					try {
+						session.getBasicRemote().sendText(error);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						System.out.println("RoomSocket: Could not send message " + error);
+						e.printStackTrace();
+					}
 				}
 				else {
+					System.out.println("Adding user, username=" + username + " nickname="+nickname);
 					User add_user = new User(username, nickname, session);	
 					join_room.addUser(add_user);					
 				}
 			}
+			else if(action.equals("ready")) {
+				player_room = this.getRoomByID(roomID);
+				if (player_room == null) {
+					
+				} else {
+					if (username == null)
+						player_room.setUserReady(nickname);
+					else
+						player_room.setUserReady(username);
+				}
+			}
 			//Player taking turn
 			else {
-				String roomID = (String)json.get("roomID");
-				Game player_room = this.getRoomByID(roomID);
-				if (player_room.isRunning()) {
+				roomID = (String)json.get("roomID");
+				player_room = this.getRoomByID(roomID);
+				if (player_room != null && player_room.isRunning()) {
 					player_room.processRequest(message);					
 				} else {
 					String errorMessage = "{"
@@ -244,7 +277,8 @@ public class RoomSocket {
 	
 	@OnError
 	public void error(Throwable error) {
-		System.out.println("Error!");
+		System.out.println("Error!" + error.getMessage());
+		error.printStackTrace();
 	}
 	
 	

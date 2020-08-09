@@ -61,7 +61,7 @@ public class UnoDeck {
 		Random random = new Random();
 		
 		for (int i = 0; i < cards.size(); i++) {
-			int randomValue = i + random.nextInt(n - 1);
+			int randomValue = i + random.nextInt(n - i);
 			UnoCard randomCard = cards.get(randomValue);
 			cards.set(randomValue, cards.get(i));
 			cards.set(i, randomCard);

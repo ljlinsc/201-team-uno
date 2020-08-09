@@ -18,12 +18,12 @@ public class ServerRoom {
 	public ServerRoom(String roomID) {
 		this.userLookup = new ReentrantLock();
 		this.players = new Vector<User>();
-		this.game = new Game(roomID, new Vector<String>());
+		this.game = new Game(roomID);
 		this.roomID = roomID;
 
 	}
 	public void addUser(User user) {
-		this.game.add(user);
+		this.game.addUser(user);
 	}
 	public User getUserByUsername(String username) {
 		this.userLookup.lock();

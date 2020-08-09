@@ -21,6 +21,7 @@ public class User {
 		this.username = username;
 		this.nickname = nickname;
 		this.registered = registered;
+		System.out.println("User: Created user with username="+username+" nickname="+nickname+" registered="+registered);
 	}
 	public User(String username, String nickname, Session comm) {
 		this.setUsername(username);
@@ -33,12 +34,17 @@ public class User {
 		}
 		this.comm = comm;
 		this.isReady = false;
+		System.out.println("User: Created user with Session=comm username="+username+" nickname="+nickname+" registered="+registered);
 	}
 	public void setRoomID(String ID) {
 		this.roomID = ID;
 	}
 	public String getUsername() {
 		return username;
+	}
+	
+	public Session getSession() {
+		return comm;
 	}
 	
 	public void setUsername(String username) {
