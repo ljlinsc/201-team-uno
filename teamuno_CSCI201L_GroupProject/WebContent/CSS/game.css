@@ -4,6 +4,10 @@
 	box-sizing: border-box;
 }
 
+input:focus, select:focus, textarea:focus, button:focus {
+	outline: none;
+}
+
 html {
 	min-height: 100vh;
 }
@@ -62,7 +66,7 @@ body {
 	height: 175px;
 	width: 125px;
 	border-radius: 2em;
-		transition: transorm 100ms ease-in-out;
+	transition: transorm 100ms ease-in-out;
 	cursor: pointer;
 }
 
@@ -72,7 +76,7 @@ body {
 	height: 100%;
 	display: flex;
 	justify-content: center;
-	aligh-items: center;
+	align-items: center;
 	cursor: pointer;
 	
 }
@@ -91,4 +95,33 @@ body {
 
 .card-hover {
 	/* */
+}
+
+.game-container button {
+	background-color: #FF6C6C;
+	width: 80px;
+	color: white;
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 0px;
+	text-align: center;
+	font-family: "Varta";
+	font-size: 24px;
+	font-weight: 300;
+	margin: 10px;
+	transition: all .2s ease-in-out;
+	border-radius: 10px;
+	border: 0px;
+}
+
+.game-container button:hover { 
+	transform: scale(1.1); 
+}
+
+.game-buttons {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	margin-left: -175px;
 }
