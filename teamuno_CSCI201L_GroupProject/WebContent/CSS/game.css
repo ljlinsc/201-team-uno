@@ -15,7 +15,7 @@ body {
 }
 .page-title {
 	color: #FF6D00;
-	font-family: Arial;
+	font-family: serif;
 	font-weight: normal;
 	text-align: center;
 	font-size: 6em;
@@ -23,7 +23,7 @@ body {
 
 .game-info {
 	color:#3b3b3b ;
-	font-family: serif;
+	font-family: Arial;
 	font-size: 4em;
 }
 
@@ -39,6 +39,10 @@ body {
 	grid-gap: 10px;
 	margin: 50px;
 	justify-content: center;
+}
+
+.cardContainer {
+	
 }
 
 .card {

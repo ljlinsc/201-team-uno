@@ -23,7 +23,7 @@ public class UnoDeck {
 	}
 	
 	private void resetUnoDeck() {
-		this.cards = new Vector<UnoCards>();
+		this.cards = new Vector<UnoCard>();
 		UnoCard.Color[] colors = UnoCard.Color.values();
 		for (int i = 0; i < colors.length - 1; i++) {
 			UnoCard.Color color = colors[i];

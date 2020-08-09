@@ -1,7 +1,9 @@
 package teamuno_CSCI201L_GroupProject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -32,6 +34,8 @@ import game.ServerRoom;
  * 		action : "createRoom"
  * 		action : "joinRoom"
  * 		action : "makeTurn"
+ * 		action : "uno"
+ * 		action : "draw"
  **********************************************************************************************
  * Based on the action determines the server response:
  * "createRoom"
@@ -58,52 +62,96 @@ import game.ServerRoom;
  * 		username : String,
  * 		nickname : String,
  * 		roomID: String,
- * 		card: Integer,
  * 		color: String,
+ * 		value: String,
  * 		endTurn: boolean
  * }
  * This will make the user turn, and then broadcast to all other users the result of the action.
  **********************************************************************************************
+ * "uno"
+ * {
+ * 		action : "uno",
+ * 		username : String,
+ * 		nickname : String,
+ * 		roomID : String,
+ * 		value: String,
+ * 		color: String
+ * }
+ * "draw"
+ * {
+ * 		action : "draw",
+ * 		username : String,
+ * 		nickname : String,
+ * 		roomID : String,
+ * 		value: String,
+ * 		color: String
+ * }
+ * 
  * Uno card notation format:
  * Draw Card:
  * 		card: 0
- * 		color: null
+ * 		color: null // MAYBE REMOVE
  * Regular Cards:
- * 		card: 1-9 (depending on value of card)
- * 		color: color of card
+ * 		card: "One", "Two", ..., "Nine" (depending on value of card)
+ * 		color: "Red", "Blue", "Yellow"
+ * 
+ * Special Cards: 
  * Reverse:
- * 		card: 10
+ * 		card: "Reverse"
  * 		color: color of card
  * Skip:
- * 		card: 11
+ * 		card: "Skip"
  * 		color: color of card
  * Draw Two:
- * 		card: 12
+ * 		card: "DrawTwo"
  * 		color: color of card
  * Wild:
- * 		card: 13
- * 		color: users color choice
+ * 		card: "Wild"
+ * 		color: "Wild"
  * Wild Draw Four:
- * 		card: 14
- * 		color: users color choice
+ * 		card: "Wild"
+ * 		value: "Wild_Four"
  */
 
 @ServerEndpoint(value = "/RoomSocket")
 public class RoomSocket {
-	private static List<ServerRoom> rooms = Collections.synchronizedList(new ArrayList<ServerRoom>());
+	private static HashMap<String, Game> rooms = new HashMap<String, Game>();
+	
 	@OnOpen
 	public void open(Session session) {
+		if (rooms.isEmpty()) {
+			rooms.put("1x1x1x", new Game("1x1x1x"));
+		}
+		
 		System.out.println("Connection made!");
+		
 	}
 	
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println(message);
+
+		String cardData = "<div class=\"card\">\n" + 
+				"				<div class=\"card-back card-face\">\n" + 
+				"					<img class=\"uno\" src=\"IMG/Blue_Zero.png\">\n" + 
+				"				</div>\n" + 
+				"				<div class=\"card-front card-face\">\n" + 
+				"				\n" + 
+				"				</div>\n" + 
+				"			</div>";
+		cardData="Red_Zero.png";
+		String addMessage = "{"
+				+ "\"type\" : \"content-change\","
+				+ "\"message\" : \"" + cardData + "\","
+				+ "\"contentChangeType\" : \"addCard\""
+				+ "}";
+		
 		JSONParser parser = new JSONParser();
 		JSONObject json = null;
 		try {
 			json = (JSONObject)parser.parse(message);
 		} catch (ParseException e) {
+			System.out.println("RoomSocket: Was unable to parse JSON in on Message");
 			e.printStackTrace();
 		}
 		//Check if message is empty
@@ -116,30 +164,77 @@ public class RoomSocket {
 			String nickname = (String)json.get("nickname");
 			//Creating room
 			if(action.equals("createRoom")) {
-				if(!this.checkIfUserInRoom(username)) {
-					String roomID = (String)json.get("roomID");
-					ServerRoom created_room = new ServerRoom(roomID);
+				String roomID = (String)json.get("roomID");
+				if(!rooms.containsKey(roomID) && !this.checkIfUserInRoom(username)) {
+					Game created_room = new Game(roomID);
 					User add_user = new User(username, nickname, session);
 					created_room.addUser(add_user);
 				}
 				else {
 					//Return error
+					String errorMessage;
+					if (rooms.containsKey(roomID) && this.checkIfUserInRoom(username) {
+						errorMessage = "{"
+								+ "\"type\" : \"error\""
+								+ "\"message\" : \"Room already exists and is in the room\""
+								+ "}";
+					}	
+					else if (rooms.containsKey(roomID)) {
+						errorMessage = "{"
+								+ "\"type\" : \"error\""
+								+ "\"message\" : \"Room already exists\""
+								+ "}";
+					} else {
+						errorMessage = "{"
+								+ "\"type\" : \"error\""
+								+ "\"message\" : \"User already in roo\""
+								+ "}";
+					}
+					session.getBasicRemote().sendText(errorMessage);
 				}
 				
 			}
 			//Joining room
 			else if(action.equals("joinRoom")) {
 				String roomID = (String)json.get("roomID");
-				ServerRoom join_room = this.getRoomByID(roomID);
-				User add_user = new User(username, nickname, session);	
-				join_room.addUser(add_user);
+				Game join_room = this.getRoomByID(roomID);
+				// Cannot join game that is running
+				if (join_room.isRunning()) {
+					String error = "{"
+							+ "\"type\" : \"error\""
+							+ "\"message\" : \"Cannot join game, it already started\""
+							+ "}";
+					session.getBasicRemote().sendText(error);
+				} 
+				// Cannot join game with max num players
+				else if (join_room.getUserCount() > 5) {
+					String error = "{"
+							+ "\"type\" : \"error\""
+							+ "\"message\" : \"Game cannot have more than 5 players\""
+							+ "}";
+					session.getBasicRemote().sendText(error);
+				}
+				else {
+					User add_user = new User(username, nickname, session);	
+					join_room.addUser(add_user);					
+				}
 			}
 			//Player taking turn
-			else if (action.equals("makeTurn")) {
+			else {
 				String roomID = (String)json.get("roomID");
-				ServerRoom player_room = this.getRoomByID(roomID);
+				Game player_room = this.getRoomByID(roomID);
+				if (player_room.isRunning()) {
+					player_room.processRequest(message);					
+				} else {
+					String errorMessage = "{"
+							+ "\"type\" : \"error\""
+							+ "\"message\" : \"Game is not running\""
+							+ "}";
+				}
 			}
 		}
+		
+	
 	}
 	
 	@OnClose
@@ -151,23 +246,24 @@ public class RoomSocket {
 	public void error(Throwable error) {
 		System.out.println("Error!");
 	}
+	
+	
 	private boolean checkIfUserInRoom(String username) {
 		if(username == null) {
 			return false;
 		}
-		for(ServerRoom s: rooms) {
+		for(Game s: rooms.values()) {
 			if(s.hasUserByUsername(username)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	private ServerRoom getRoomByID(String ID) {
-		for(ServerRoom s: rooms) {
-			if(s.roomID.equals(ID)) {
-				return s;
-			}
+	private Game getRoomByID(String ID) {
+		if (rooms.containsKey(ID)) {
+			return rooms.get(ID);
 		}
+		
 		return null;
 	}
 

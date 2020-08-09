@@ -8,24 +8,26 @@ import java.util.Vector;
 
 import game.Card;
 import game.Deck;
+import teamuno_CSCI201L_GroupProject.Game;
 
-public class ServerThread implements Runnable{
+public class ServerThread implements Runnable {
 	private String username;
 	private Vector<Card> playerHand;
 	private Deck wholeDeck; 
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
-	private GameRoom gr;
+	private Game game;
 	
 	
-	public ServerThread(String username, GameRoom gr, Socket s) {
+	public ServerThread(String username, Game gr, Socket s) {
 		try {
 			this.username = username;
-			this.gr = gr;
+			this.game = gr;
 			ois = new ObjectInputStream(s.getInputStream());
 			oos = new ObjectOutputStream(s.getOutputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("ServerThread: Could not initialize Server Thread for "+username);
 			e.printStackTrace();
 		}
 		

@@ -31,29 +31,29 @@ class AudioController {
 	}
 }
 
-class Uno {
-	constructor(startTime, cards) {
-		this.cardsArray = cards;
-		this.time = startTime;
-		this.cardToCheck = null;
-	}
-	
-	startGame() {
-		
-	}
-}
+//class Uno {
+//	constructor(startTime, cards) {
+//		this.cardsArray = cards;
+//		this.time = startTime;
+//		this.cardToCheck = null;
+//	}
+//	
+//	startGame() {
+//		
+//	}
+//}
 
-function ready() {
-	let cards = Array.from(document.getElementsByClassName('card'));
-	
-	cards.forEach(card => {
-		card.addEventListener('click', () => {
-			// REMOVE CARD HERE
-			game.remove(card);
-		})
-	});
-	
-	
-}
+//function ready() {
+//	let cards = Array.from(document.getElementsByClassName('card'));
+//	
+//	cards.forEach(card => {
+//		card.addEventListener('click', () => {
+//			// REMOVE CARD HERE
+//			game.remove(card);
+//		})
+//	});
+//	
+//	
+//}
 
 let audioController = new AudioController();
