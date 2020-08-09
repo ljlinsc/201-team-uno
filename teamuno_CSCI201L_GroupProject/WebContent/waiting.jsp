@@ -29,7 +29,6 @@
 			<h1>You've entered the game room, ${user.getNickname()}</h1>
 			<h1>Currently waiting for other players . . .</h1>
 		</div>
-		
 	</div>
 </body>
 </html>

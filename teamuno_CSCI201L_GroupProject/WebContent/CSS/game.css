@@ -1,4 +1,4 @@
-@CHARSET "ISO-8859-1";
+@charset "ISO-8859-1";
 
 * {
 	box-sizing: border-box;
@@ -10,27 +10,38 @@ html {
 
 body {
 	margin: 0;
-	background: radial-gradient(#ffffff, #73726f);
+	/*background: radial-gradient(#ffffff, #73726f);*/
 	
 }
 .page-title {
-	color: #FF6D00;
-	font-family: serif;
-	font-weight: normal;
-	text-align: center;
-	font-size: 6em;
+	font-family: "Varta";
+	font-weight: 600;
+	font-size: 40px;
+	margin: 0;
 }
 
 .game-info {
-	color:#3b3b3b ;
-	font-family: Arial;
-	font-size: 4em;
+	/*color:#3b3b3b ;*/
+	font-size: 16px;
+}
+
+.game-info-players {
+	color: #3b3b3b;
+	font-weight: 300;
+	margin-left: 10px;
 }
 
 .game-info-container {
-	grid-column: 1 / -1;
+	font-family: "Varta";
+	font-weight: 600;
+	width: 300px;
+	position: absolute;
+	padding: 20px;
+	top: 0;
+	left: 0;
+	/*grid-column: 1 / -1;
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-between;*/
 }
 
 .game-container {

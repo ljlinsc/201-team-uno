@@ -39,17 +39,17 @@ public class EnterGameServlet extends HttpServlet {
 		if(usr.isRegistered() && allRoomID.contains(msg)) {
 			roomID = msg;
 			usr.setRoomID(roomID);
-			next_page = "/waiting.jsp";
+			next_page = "/game.html";
 		}
 		else if(usr.isRegistered() && msg == null) {
 			roomID = generateHex();
 			usr.setRoomID(roomID);
-			next_page = "/waiting.jsp";
+			next_page = "/game.html";
 		}
 		else if (allRoomID.contains(msg)) {
 			roomID = msg;
 			usr.setRoomID(msg);
-			next_page = "/waiting.jsp";
+			next_page = "/game.html";
 		}
 		else {
 			request.setAttribute("message", "Error game room code invalid.");
