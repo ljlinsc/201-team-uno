@@ -57,11 +57,11 @@ public class Game {
 	}
 	
 	public void start() {
-		
+		System.out.println("Game: starting game");
 		for (int i = 0; i < playerIDs.size(); i++)
 		{
 			Vector<UnoCard> hand = new Vector<UnoCard>(deck.drawCard(7));
-			
+			playerHand.setElementAt(hand, i);
 		}
 		
 		UnoCard card = deck.drawCard();
@@ -71,6 +71,8 @@ public class Game {
 		while (card.getValue() == UnoCard.Value.Wild || card.getValue() == UnoCard.Value.Wild_Four || card.getValue() == UnoCard.Value.DrawTwo) {
 			stockPile.add(card);
 			card = deck.drawCard();
+			validColor = card.getColor();
+			validValue = card.getValue();
 		}
 
 		if (card.getValue() == UnoCard.Value.Skip)
@@ -95,14 +97,49 @@ public class Game {
 		
 		stockPile.add(card);
 		running = true;
+		
+		String addTopCard = "{"
+				+ "\"type\" : \"content-change\","
+				+ "\"contentChangeType\" : \"changeTopCard\","
+				+ "\"message\" : \"" + stockPile.get(stockPile.size() - 1).toString() + "\""
+				+ "}";
+		sendMessageToAllUsers(addTopCard);
+		for (int i = 0; i < playerIDs.size(); i++) {
+			Vector<UnoCard> currHand = playerHand.get(i);
+			for (UnoCard c : currHand) {
+				String addCards = "{"
+						+ "\"type\" : \"content-change\","
+						+ "\"contentChangeType\" : \"initCards\","
+						+ "\"message\" : \"" + c.toString() + "\""
+						+ "}";
+				try {
+					sessions.get(i).getBasicRemote().sendText(addCards);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 	
 	public UnoCard getTopCard() {
 		return new UnoCard(validColor, validValue);
 	}
 	
+	public void sendMessageToAllUsers(String message) {
+		for (Session s: sessions) {
+			try {
+				s.getBasicRemote().sendText(message);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public String getTopCardImage() {
-		return getTopCard().toString() + ".png";
+		return getTopCard().toString();
 	}
 	
 	public boolean isGameOver() {
@@ -154,10 +191,10 @@ public class Game {
 	}
 	
 	public boolean checkPlayerTurn(String pid) {
-		if (this.playerIDs.get(this.currentPlayer) != pid) {
-			return false;
+		if (this.playerIDs.get(this.currentPlayer).equals(pid)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 	public String submitDraw(String pid) {
 		
@@ -165,7 +202,11 @@ public class Game {
 			deck.replaceDeckWith(stockPile);
 		}
 		
-		getPlayerHand(pid).add(deck.drawCard());
+		// CHeck if EXCEPTION THOWN
+		UnoCard newCard = deck.drawCard();
+		getPlayerHand(pid).add(newCard);
+		
+		// Go to next Player
 		if (!gameDirection) {
               currentPlayer = (currentPlayer + 1)%playerIDs.size();
 		} else if(gameDirection) {
@@ -175,12 +216,18 @@ public class Game {
 				currentPlayer--;
 			}
 		}
-		// Update user on their own info
+		// Update user on their own info (probs not)
 		
 		
 		// Update all other users on info
 		
-		return "";
+		return "{"
+				+ "\"nextPlayer\" : \"" + playerIDs.get(currentPlayer) + "\","
+				+ "\"requestSentBy\" : \"" + pid + "\","
+				+ "\"message\" : \"" + newCard.toString() + "\","
+				+ "\"type\" : \"content-change\","
+				+ "\"contentChangeType\" : \"drawCard\""
+				+ "}";
 	}
 	
 	public void setCardColor(UnoCard.Color color) {
@@ -192,7 +239,7 @@ public class Game {
 		sessions.add(session);
 	}
 	
-	// Currently does not work with wild cards
+	// TODO: Currently does not work with wild cards!!!
 	public String takeTurn(String userID, UnoCard.Color color, UnoCard.Value value) {
 		String topCard = null;
 		String nextPlayer = null;
@@ -201,7 +248,9 @@ public class Game {
 		String gameDirection = null;
 		String cardToRemove = null;
 		
-		if (color != UnoCard.Color.Wild) {
+		System.out.println("takeTurn: "+ new UnoCard(color, value).toString());
+		
+		if (color == UnoCard.Color.Wild) {
 			
 		}
 		else {
@@ -238,17 +287,20 @@ public class Game {
 			message = "Player " + userID + " put down card";// doesnt specify which one
 			topCard = new UnoCard(validColor, validValue).toString();
 			nextPlayer = this.playerIDs.get(currentPlayer);
+			
 		}
+		// Adds placed card to stockpile
+		stockPile.add(new UnoCard(color, value));
 		
 		return "{"
 				+ "\"type\" : \"content-change\","
-				+ "\"contentChangeType\" : \"addCard\""
-				+ "\"topCard\" : " + topCard + ","
-				+ "\"nextPlayer\" : " + nextPlayer + ","
-				+ "\"requestSentBy\" : " + requestSentBy + ","
-				+ "\"message\" : " + message + ","
-				+ "\"gameDirection\" : " + gameDirection + ","
-				+ "\"cardToRemoveID\" : " + cardToRemove
+				+ "\"contentChangeType\" : \"takeTurnCallback\","
+				+ "\"topCard\" : \"" + topCard + "\","
+				+ "\"nextPlayer\" : \"" + nextPlayer + "\","
+				+ "\"requestSentBy\" : \"" + requestSentBy + "\","
+				+ "\"message\" : \"" + message + "\","
+				+ "\"gameDirection\" : \"" + gameDirection + "\","
+				+ "\"cardToRemoveID\" : \"" + cardToRemove + "\""
 				+ "}";
 		
 	}
@@ -256,7 +308,7 @@ public class Game {
 	// Currently does not work with wild cards
 	public String uno(String userID, UnoCard.Color color, UnoCard.Value value) {
 		if (this.getPlayerHand(userID).size() == 1) {
-			String wonGame;
+			String wonGame = "";
 			return wonGame; // Sucess
 		}
 		String errorMessage = "{"
@@ -269,7 +321,7 @@ public class Game {
 			sessions.get(index).getBasicRemote().sendText(errorMessage);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Game (id="roomID+") could not send error message for uno to player="+userID);
+			System.out.println("Game (id="+gameID+") could not send error message for uno to player="+userID);
 			e.printStackTrace();
 		}
 		
@@ -295,6 +347,7 @@ public class Game {
 			String MessageToAllUsers = play(action, userID, cardColor, cardValue);
 			if (MessageToAllUsers != null) {
 				System.out.println("Game: Sending message to all Users, msg="+MessageToAllUsers);
+				broadcastMessage(MessageToAllUsers);
 			}
 		} catch (ParseException e) {
 			System.out.println("Game: Could not processRequest for " + json);
@@ -305,16 +358,24 @@ public class Game {
 	
 	public String play(String action, String userID, String cardColor, String cardValue) {
 		Action currentAction = new Action(action, userID, cardColor, cardValue);
-		
-		if (isValidCardPlay(new UnoCard(currentAction.getCardColor(), currentAction.getCardValue()))
-				&& checkPlayerTurn(userID))
+		System.out.println("current player: " + playerIDs.get(currentPlayer));
+		System.out.println("action: " + action);
+		System.out.println("userID: " + userID);
+		System.out.println("validplayer: " + checkPlayerTurn(userID));
+//		System.out.println("vaildcard: " )
+		// Needs to be current player's turn
+		// TODO: checkPlayerTurn function faSiling
+		if (checkPlayerTurn(userID))
 		{
-			if (action == "draw") {
+			if (action.equals("draw") /* && checkPlayerTurn(userID) */){
 				return submitDraw(userID);
-			} else if (action == "makeTurn") {
-				return takeTurn(userID, currentAction.getCardColor(), currentAction.getCardValue());
-			} else if (action == "uno") {
-				return uno(userID, currentAction.getCardColor(), currentAction.getCardValue());
+			} else if (isValidCardPlay(new UnoCard(currentAction.getCardColor(), currentAction.getCardValue())))
+			{
+				if (action.equals("makeTurn")) {
+					return takeTurn(userID, currentAction.getCardColor(), currentAction.getCardValue());
+				} else if (action.equals("uno")) {
+					return uno(userID, currentAction.getCardColor(), currentAction.getCardValue());
+				}
 			}
 		}
 		else { // Could not process request
@@ -323,7 +384,7 @@ public class Game {
 				this.getUserByNickname(userID);
 			}
 			user.sendMessage("{"
-					+ "\"error\" : true,"
+					+ "\"type\" : \"error\","
 					+ "\"message\" : \"There was an error processing your request\""
 					+ "}");
 			return null;
@@ -379,11 +440,20 @@ public class Game {
 			return false;
 		}
 	}
-	public void setUserReady(String nickname) {
-		User usr = this.getUserByNickname(nickname);
-		usr.playerReady();
-		if (allReady()) {
-			running = true;
+	public void setUserReady(String userID) {
+		User usr = this.getUserByUsername(userID);
+		if (usr == null) {
+			usr = this.getUserByNickname(userID);
+		}
+		
+		if (usr != null) {
+			usr.playerReady();
+			System.out.println("Game: Set user " + userID + " ready");
+			if (allReady()) {
+				start();
+			}			
+		} else {
+			System.out.println("Game: Could not find user by username or nickname in setUserReady(String userId");
 		}
 	}
 
@@ -393,6 +463,9 @@ public class Game {
 		}
 	}
 	
+	/*
+	 * Used when joining game
+	 */
 	public void addUser(User user) {
 		players.add(user);
 		if (!user.isRegistered()) {
@@ -402,6 +475,7 @@ public class Game {
 			playerIDs.add(user.getUsername());
 		}
 		playerHand.add(new Vector<UnoCard>());
+		sessions.add(user.getSession());
 	}
 	
 	public User getUserByUsername(String username) {
@@ -439,46 +513,49 @@ class Action {
 	}
 	
 	public UnoCard.Color getCardColor() {
-		if (cardColor == "Blue") {
+		if (cardColor.equals("Blue")) {
 			return UnoCard.Color.Blue;
-		} else if (cardColor == "Green") {
+		} else if (cardColor.equals("Green")) {
 			return UnoCard.Color.Green;
-		} else if (cardColor == "Red") {
+		} else if (cardColor.equals("Red")) {
 			return UnoCard.Color.Red;
-		} else if (cardColor == "Wild") {
+		} else if (cardColor.equals("Wild")) {
 			return UnoCard.Color.Wild;
-		} else if (cardColor == "Yellow") {
+		} else if (cardColor.equals("Yellow")) {
 			return UnoCard.Color.Yellow;
 		}
 		return null; // Error
 	}
 	
 	public UnoCard.Value getCardValue() {
-		if (cardValue == "1") {
+		if (cardValue.equals("Zero")) {
+			return UnoCard.Value.Zero;
+		}
+		else if (cardValue.equals("One")) {
 			return UnoCard.Value.One;
-		} else if (cardValue == "2") {
+		} else if (cardValue.equals("Two")) {
 			return UnoCard.Value.Two;
-		} else if (cardValue == "3") {
+		} else if (cardValue.equals("Three")) {
 			return UnoCard.Value.Three;
-		} else if (cardValue == "4") {
+		} else if (cardValue.equals("Four")) {
 			return UnoCard.Value.Four;
-		} else if (cardValue == "5") {
+		} else if (cardValue.equals("Five")) {
 			return UnoCard.Value.Five;
-		} else if (cardValue == "6") {
+		} else if (cardValue.equals("Six")) {
 			return UnoCard.Value.Six;
-		} else if (cardValue == "7") {
+		} else if (cardValue.equals("Seven")) {
 			return UnoCard.Value.Seven;
-		} else if (cardValue == "8") {
+		} else if (cardValue.equals("Eight")) {
 			return UnoCard.Value.Eight;
-		} else if (cardValue == "9") {
+		} else if (cardValue.equals("Nine")) {
 			return UnoCard.Value.Nine;
-		} else if (cardValue == "Skip") {
+		} else if (cardValue.equals("Skip")) {
 			return UnoCard.Value.Skip;
-		} else if (cardValue == "Reverse") {
+		} else if (cardValue.equals("Reverse")) {
 			return UnoCard.Value.Reverse;
-		} else if (cardValue == "Wild_Four") {
+		} else if (cardValue.equals("Wild_Four")) {
 			return UnoCard.Value.Wild_Four;
-		} else if (cardValue == "Wild") {
+		} else if (cardValue.equals("Wild")) {
 			return UnoCard.Value.Wild;
 		}
 		return null;//error

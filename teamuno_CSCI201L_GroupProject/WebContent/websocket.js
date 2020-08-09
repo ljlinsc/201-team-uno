@@ -11,6 +11,7 @@
  * 		action : "joinRoom"
  * 		action : "makeTurn"
  * 		action : "uno"
+ * 		action : "ready"
  **********************************************************************************************
  * Based on the action determines the server response:
  * "createRoom"
@@ -57,6 +58,13 @@
  *		username: String,
  *		nickname: String,
  *		roomOD: String
+ * }
+ * "ready"
+ * {
+ * 		action: "ready",
+ * 		username : String,
+ * 		nicknake : String,
+ * 		roomID : String
  * }
   * This will make the user turn, and then broadcast to all other users the result of the action.
  **********************************************************************************************
@@ -110,27 +118,9 @@ class GameWebSocket{
 }
 
 var game;
-function connect() {
-	game = new GameWebSocket(connectionURL);
-	
-	// Game ID is embedded in HTML
-	var gameID = document.getElementById("gameRoomID").innerHTML;
-	
-	// Connect to Game using gameID
-	joinGame(gameID);
-	
-}
-
-function joinGame(gameID) {
-	var joinInstructions = {
-			"action" : "joinRoom",
-			"username" : "jargote",
-			"nickname" : "jarjarbinks",
-			"roomID" : gameID
-	}
-	game.sendMessage(JSON.stringify(joinInstructions));
-}
-
+/*
+ * REPONSE FUNCTIONS (MESSAGES FROM SERVER)
+ */
 /*
 	REPONSE FORMAT FROM SERVER
 	{
@@ -149,14 +139,17 @@ function processMessage(message) {
 	if (text.type === "error") {
 		alert(text.message);
 	} else if (text.type === "content-change") {
-		if (text.contentChangeType === "addCard") {
-			addCard(text);
+		console.log("<"+text.contentChangeType+">");
+		if (text.contentChangeType === "takeTurnCallback") {
+			takeTurnCallback(text);
 		} else if (text.contentChangeType === "changeTopCard") {
 			changeTopCard(text.message);
-		} else if (contentChangeType === "drawCard") {
+		} else if (text.contentChangeType === "drawCard") {
 			addCardToHand(text);
+		} else if (text.contentChangeType === "initCards") {
+			initCards(text);
 		}
-	} else {
+	}  else {
 		console.log("from processMessage(): Could not recongnize message type " + text.type);
 		
 	}
@@ -164,16 +157,129 @@ function processMessage(message) {
 
 function draw() {
 	console.log("draw()");
+	var username = document.getElementById("playerID").innerHTML;
+	var roomID = document.getElementById("gameRoomID").innerHTML;
 	var data = {
 			"action" : "draw",
-			"username" : "testUsername",
-			"roomID" : "testID"
+			"username" : username,
+			"nickname" : username,
+			"roomID" : roomID
 	};
-	
 	game.socket.send(JSON.stringify(data));
 }
 
-function addCard(HTMLData) {
+
+function placeCard(card) {
+	console.log("test");
+	// Determine card color and value
+	// CHECK IF WE ARE INCLUDING DRAW TWO COLORED!!!!
+	previousCardDraw = card;
+	var color;
+	var value;
+	var title = card.title;
+	if (title.includes("Blue")) {
+		color = "Blue";
+	} else if (title.includes("Red")) {
+		color = "Red";
+	} else if (title.includes("Yellow")) {
+		color = "Yellow";
+	} else if (title.includes("Green")) {
+		color = "Green";
+	} else if (title.includes("Wild")) {
+		color = "Wild";
+	}
+	
+	if (title.includes("Zero")) {
+		value = "Zero";
+	} else if (title.includes("One")) {
+		value = "One";
+	} else if (title.includes("Two")) {
+		value = "Two";
+	} else if (title.includes("Three")) {
+		value = "Three";
+	} else if (title.includes("Four")) {
+		value = "Four";
+	} else if (title.includes("Five")) {
+		value = "Five";
+	} else if (title.includes("Six")) {
+		value = "Six";
+	} else if (title.includes("Seven")) {
+		value = "Seven";
+	} else if (title.includes("Eight")) {
+		value = "Eight";
+	} else if (title.includes("Nine")) {
+		value = "Nine";
+	} else if (title.includes("Ten")) {
+		value = "Ten";
+	} else if (title.includes("Reverse")) {
+		value = "Reverse";
+	} else if (title.includes("Skip")) {
+		value = "Skip";
+	} else if (title.includes("Wild_Four")) {
+		value = "Wild_Four";
+	} else if (title.includes("Wild")) {
+		value = "Wild";
+	}
+	
+	console.log("cardColor="+color +" value="+value);
+	
+//	switch(title) {
+//		case "Blue_One":
+//			break;
+//		case "Blue_Two":
+//			break;
+//		case "Blue_Three":
+//			break;
+//		case "Blue_Four":
+//			break;
+//		case "Blue_Five":
+//			break;
+//		case "Blue_Six":
+//			break;
+//		case "Blue_Seven":
+//			break;
+//		case "Blue_Nine":
+//			break;
+//		case "Blue_
+//	}
+	var playerID = document.getElementById("playerID").innerHTML;
+	var roomID = document.getElementById("gameRoomID").innerHTML;
+	var playCardInstructions = {
+			"action" : "makeTurn",
+			"username" : playerID,
+			"nickname" : playerID,
+			"roomID" : roomID,
+			"cardColor" : color,
+			"cardValue" : value
+	}
+	game.socket.send(JSON.stringify(playCardInstructions));
+}
+
+/**CallBack function from Server initiating cards for all players
+ * {
+ * 	"action" : "initCards",
+ * 	"message" : [cardPNG]
+ * }
+ * @param JSONData
+ * @returns
+ */
+function initCards(JSONData) {
+	console.log("initCards()");
+	var cardHolder = document.getElementsByClassName("game-container");
+	
+	var cardData = 
+	"<div onclick=\"placeCard(this)\" class=\"card " + JSONData.message +"\" title=\"" + JSONData.message +"\>\n" + 
+	"				<div class=\"card-back card-face\">\n" + 
+	"					<img  class=\"uno\" src=\"IMG/" + JSONData.message + ".png\">\n" + 
+	"				</div>\n" + 
+	"			</div>";
+	
+	cardHolder[1].innerHTML += cardData; 
+}
+
+// addCard callback function
+var previousCardDraw;
+function takeTurnCallback(HTMLData) {
 	var cardHolder = document.getElementsByClassName("game-container");
 	
 	var topCard = HTMLData.topCard;
@@ -186,8 +292,9 @@ function addCard(HTMLData) {
 	
 	// Remove card from the player that put down that card on Screen
 	if (playerID === requestSentBy) {
-		cardsWithClassName = document.getElementsByClassName(cardToRemove);
-		cardsWithClassName[0].remove(cardsWithClassName[0].selectedIndex);
+		previousCardDraw.remove();
+//		var cardsWithClassName = document.getElementsByClassName(cardToRemove);
+//		cardsWithClassName[0].remove(cardsWithClassName[0].selectedIndex);
 	}
 	
 	// Update next player on Screen
@@ -199,14 +306,12 @@ function addCard(HTMLData) {
 
 
 function changeTopCard(topCardName) {
+	console.log("changeTopCard()");
 	var cardHolder = document.getElementsByClassName("game-container");
-	var cardData = "<div class=\"card\">" +
+	var cardData =
 	"<div class=\"card\">\n" + 
 	"				<div class=\"card-back card-face\">\n" + 
-	"					<img class=\"uno\" src=\"IMG/" + topCardName + "\">\n" + 
-	"				</div>\n" + 
-	"				<div class=\"card-front card-face\">\n" + 
-	"				\n" + 
+	"					<img class=\"uno\" src=\"IMG/" + topCardName + ".png\">\n" + 
 	"				</div>\n" + 
 	"			</div>";
 	cardHolder[0].innerHTML = cardData;
@@ -214,16 +319,14 @@ function changeTopCard(topCardName) {
 
 // drawCard Callback Function (info From Server)
 function addCardToHand(JSONData) {
+	var cardHolder = document.getElementsByClassName("game-container");
 	var nextPlayer = JSONData.nextPlayer;
 	var requestSentBy = JSONData.requestSentBy;
-	var cardToAdd = HTMLData.message;
-	var cardData = "<div class=\"card\">" +
-	"<div class=\"card\">\n" + 
+	var cardToAdd = JSONData.message;
+	var cardData = 
+	"<div onclick=\"placeCard(this)\" class=\"card " + JSONData.message +"\" title=\"" + JSONData.message +"\>\n" + 
 	"				<div class=\"card-back card-face\">\n" + 
-	"					<img class=\"uno\" src=\"IMG/" + cardToAdd + "\">\n" + 
-	"				</div>\n" + 
-	"				<div class=\"card-front card-face\">\n" + 
-	"				\n" + 
+	"					<img  class=\"uno\" src=\"IMG/" + JSONData.message + ".png\">\n" + 
 	"				</div>\n" + 
 	"			</div>";
 	var playerID = document.getElementById("playerID").innerHTML;
@@ -237,9 +340,43 @@ function addCardToHand(JSONData) {
 	}
 }
 
+/*
+ * REQUEST FUNCTIONS
+ * User requests an action to the server
+ */
 function ready() {
 	console.log("ready()");
-	game.socket.send("ready");
+	var playerID = document.getElementById("playerID").innerHTML;
+	var roomID = document.getElementById("gameRoomID").innerHTML;
+	
+	var readyRequest = {
+			"action" : "ready",
+			"username" : playerID,
+			"nickname" : playerID,
+			"roomID" : roomID
+	}
+	game.socket.send(JSON.stringify(readyRequest));
+}
+
+function connect() {
+	game = new GameWebSocket(connectionURL);
+	
+	// Game ID is embedded in HTML
+	var gameID = document.getElementById("gameRoomID").innerHTML;
+	
+
+}
+
+function joinGame() {
+	var gameID = document.getElementById("gameRoomID").innerHTML;
+	var joinInstructions = {
+			"action" : "joinRoom",
+			"username" : "jargote",
+			"nickname" : "jarjarbinks",
+			"roomID" : gameID
+	}
+	console.log(gameID + "sending..." + joinInstructions);
+	game.sendMessage(JSON.stringify(joinInstructions));
 }
 
 function uno() {

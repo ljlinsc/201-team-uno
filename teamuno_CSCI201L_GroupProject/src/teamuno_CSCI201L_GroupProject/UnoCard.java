@@ -37,4 +37,8 @@ public class UnoCard {
 	public String toString() {
 		return color + "_" + value;
 	}
+	
+	public String getImageString() {
+		return toString() + ".png";
+	}
 }
