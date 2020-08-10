@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import teamuno_CSCI201L_GroupProject.User;
+import teamuno_CSCI201L_GroupProject.RoomSocket;
 
 
 @WebServlet("/EnterGameServlet")
@@ -36,7 +37,7 @@ public class EnterGameServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User usr = (User) session.getAttribute("user");
 		String next_page;
-		if(allRoomID.contains(msg)) { // Registered or unregistered users can enter game
+		if(RoomSocket.roomsExists(msg)) { // Registered or unregistered users can enter game
 			roomID = msg;
 			usr.setRoomID(roomID);
 			

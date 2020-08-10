@@ -126,12 +126,19 @@ var game;
 	{
 		"type" : String, [valid values = "error", "content-change"]
 		message : String,
-		"contentChangeType" : "addCard" "changeTopCard" "drawCard"
+		"contentChangeType" : "addCard" "changeTopCard" "drawCard" "newUser"
 	}
 	// When a user puts down a card successfully
 	// Send to all users
 	{
 	
+	}
+	
+	"newUser"
+	{
+		"type" : "content-change",
+		"contentChangeType" : "newUser",
+		"newUserID" : String (userid)
 	}
 */
 function processMessage(message) {
@@ -148,6 +155,10 @@ function processMessage(message) {
 			addCardToHand(text);
 		} else if (text.contentChangeType === "initCards") {
 			initCards(text);
+		} else if (text.contentChangeType === "newUser") {
+			addNewPlayer(text);
+		} else if (text.contentChangeType === "currentPlayer") {
+			changeCurrentPlayer(text);
 		}
 	}  else {
 		console.log("from processMessage(): Could not recongnize message type " + text.type);
@@ -340,6 +351,22 @@ function addCardToHand(JSONData) {
 	}
 }
 
+// 
+function changeCurrentPlayer(JSONData) {
+	var currentPlayer = JSONData.currentPlayer;
+	document.getElementById("currentPlayer").innerHTML = currentPlayer;
+}
+
+// Add new Player Callback Function
+function addNewPlayer(JSONData) {
+	var newUserID = JSONData.newUserID;
+	var playerData = "<div class=\"game-info\">\n" + 
+	"				<span>" + newUserID+ "</span>\n" + 
+	"			</div>" 
+	
+	var gamePlayerContainer = document.getElementsByClassName("game-info-players")[0];
+	gamePlayerContainer.innerHTML += playerData;
+}
 /*
  * REQUEST FUNCTIONS
  * User requests an action to the server
@@ -369,10 +396,11 @@ function connect() {
 
 function joinGame() {
 	var gameID = document.getElementById("gameRoomID").innerHTML;
+	var playerID = document.getElementById("playerID").innerHTML;
 	var joinInstructions = {
 			"action" : "joinRoom",
-			"username" : "jargote",
-			"nickname" : "jarjarbinks",
+			"username" : playerID,
+			"nickname" : playerID,
 			"roomID" : gameID
 	}
 	console.log(gameID + "sending..." + joinInstructions);

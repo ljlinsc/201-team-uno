@@ -273,6 +273,18 @@ public class Game {
 				}
 			}
 			
+			if (this.gameDirection)
+			{
+				currentPlayer = (currentPlayer + 1)%playerIDs.size();
+			}
+			else
+			{
+				if (currentPlayer == 0)
+					currentPlayer = playerIDs.size() - 1;
+				else
+					currentPlayer--;
+			}
+			
 			
 			
 			if (!this.gameDirection) {
@@ -476,6 +488,35 @@ public class Game {
 		}
 		playerHand.add(new Vector<UnoCard>());
 		sessions.add(user.getSession());
+		
+		// Tell other users that new user was added
+		String newUserID = user.getUsername();
+		String newUserInformation = "{" +
+		"		\"type\" : \"content-change\",\n" + 
+		"		\"contentChangeType\" : \"newUser\",\n" + 
+		"		\"newUserID\" : \"" + newUserID + "\"" + 
+		"	}";
+		String currentPlayerInformation = "{" +
+		"		\"type\" : \"content-change\",\n" + 
+		"		\"contentChangeType\" : \"currentPlayer\",\n" + 
+		"		\"currentPlayer\" : \"" + playerIDs.get(0) + "\"" + 
+		"	}";
+		
+		try {
+			sessions.get(sessions.size()-1).getBasicRemote().sendText(currentPlayerInformation);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		for (int i = 0; i < sessions.size() - 1; i++) {
+			try {
+				sessions.get(i).getBasicRemote().sendText(newUserInformation);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public User getUserByUsername(String username) {

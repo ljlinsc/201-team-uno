@@ -38,14 +38,14 @@ if (createGame != null && createGame.equals("true")) {
 			Time: <span id="time">0</span>
 		</div> -->
 		<div class="game-info">
+				Current Player: <span id="currentPlayer"></span>
+		</div>
+		<div class="game-info">
 			Players: <span id="players">0</span>
 		</div>
 		<div class="game-info-players">
 			<div class="game-info">
-				<span id="playerID"><%=user.getUsername()%></span>
-			</div>
-			<div class="game-info">
-				<span id="currentPlayer">jargote</span>
+				<span><b id="playerID"><%=user.getUsername()%></b><b> (YOU)</b></span>
 			</div>
 		</div>
 	</div>
