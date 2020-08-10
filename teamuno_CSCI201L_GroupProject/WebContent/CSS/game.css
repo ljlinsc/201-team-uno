@@ -125,3 +125,41 @@ body {
 	left: 50%;
 	margin-left: -175px;
 }
+
+.modal-content button {
+	width: 100px;
+	color: white;
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 0px;
+	text-align: center;
+	font-family: "Varta";
+	font-size: 24px;
+	font-weight: 300;
+	margin: 10px;
+	transition: all .2s ease-in-out;
+	border-radius: 10px;
+	border: 0px;
+}
+
+#wildRedButton {
+	background-color: red;
+}
+
+#wildBlueButton {
+	background-color: blue;
+}
+
+#wildYellowButton {
+	background-color: orange;
+}
+
+#wildGreenButton {
+	background-color: green;
+}
+
+.modal-content button:hover {
+	transform: scale(1.5); 
+	cursor: pointer;
+}

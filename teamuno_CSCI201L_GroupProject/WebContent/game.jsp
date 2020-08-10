@@ -8,6 +8,46 @@
 <script src="websocket.js" async></script>
 <!-- <script src="game.js" async> -->
 </head>
+<style>
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  align-content: center;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
 <%
 teamuno_CSCI201L_GroupProject.User user = (teamuno_CSCI201L_GroupProject.User) session.getAttribute("user");
 String theRoomID = (String) request.getParameter("roomID");
@@ -28,8 +68,39 @@ if (createGame != null && createGame.equals("true")) {
 }
 %>
 <body onload="connect()">
+<!-- Used for popups  -->
+<!-- The Modal -->
+<div id="myModal" class="modal selectWildCard">
+
+  <!-- Modal content -->
+  <div  class="modal-content">
+    <span class="close">&times;</span>
+    <p>Select your Wild Card color</p>
+    		<button id="wildRedButton" onclick="playWild('Red')">RED</button>
+    		<button id="wildBlueButton" onclick="playWild('Blue')">BLUE</button>
+    		<button id="wildYellowButton" onclick="playWild('Yellow')">YELLOW</button>
+    		<button id="wildGreenButton" onclick="playWild('Green')">GREEN</button>
+    
+  </div>
+</div>
+
+<!-- Wild Four Selector -->
+<div id="myModal" class="modal selectWildFourCard">
+   <!-- Modal content -->
+  <div  class="modal-content selectWildFourCard">
+    <span class="close">&times;</span>
+    <p>Select your Wild Four Card color</p>
+    		<button id="wildRedButton" onclick="playWildFour('Red')">RED</button>
+    		<button id="wildBlueButton" onclick="playWildFour('Blue')">BLUE</button>
+    		<button id="wildYellowButton" onclick="playWildFour('Yellow')">YELLOW</button>
+    		<button id="wildGreenButton" onclick="playWildFour('Green')">GREEN</button>
+    
+  </div>
+</div>
+
 	<!-- Contains all of the information about the game -->
 	<div class="game-info-container">
+
 		<h1 class="page-title">UNO</h1>
 		<div class="game-info">
 			Game Room ID: <span id="gameRoomID"><%=theRoomID%></span>

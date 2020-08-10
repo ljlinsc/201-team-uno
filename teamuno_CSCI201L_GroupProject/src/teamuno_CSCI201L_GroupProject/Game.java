@@ -185,7 +185,8 @@ public class Game {
 	}
 
 	public boolean isValidCardPlay(UnoCard card) {
-		return card.getColor() == validColor || card.getValue() == validValue;
+		return card.getValue() == UnoCard.Value.Wild || card.getValue() == UnoCard.Value.Wild_Four ||
+				card.getColor() == validColor || card.getValue() == validValue;
 	}
 
 	public boolean checkPlayerTurn(String pid) {
@@ -232,7 +233,30 @@ public class Game {
 	public void addSession(Session session) {
 		sessions.add(session);
 	}
-
+	// TODO: Check there are enough cards
+	// TODO: Only send data to one player not alll
+	public void drawCallBack(String userID, int n) {
+		Vector<UnoCard> cardsToAdd = new Vector<UnoCard>();
+		for (int i = 0; i < n; i++) {
+			UnoCard toAdd = deck.drawCard();
+			
+			String message = "{"
+			+ "\"nextPlayer\" : \"" + playerIDs.get(currentPlayer) + "\","
+			+ "\"requestSentBy\" : \"" + userID + "\","
+			+ "\"message\" : \"" + toAdd.toString() + "\","
+			+ "\"type\" : \"content-change\","
+			+ "\"contentChangeType\" : \"drawCard\""
+			+ "}";
+			
+			try {
+				sessions.get(playerIDs.indexOf(userID)).getBasicRemote().sendText(message);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			};
+		}
+	}
+	
 	// TODO: Currently does not work with wild cards!!!
 	public String takeTurn(String userID, UnoCard.Color color, UnoCard.Value value) {
 		String topCard = null;
@@ -241,11 +265,28 @@ public class Game {
 		String message = null;
 		String gameDirection = null;
 		String cardToRemove = null;
-
-		System.out.println("takeTurn: " + new UnoCard(color, value).toString());
-
-		if (color == UnoCard.Color.Wild) {
-
+		
+		System.out.println("takeTurn: "+ new UnoCard(color, value).toString());
+		
+		if (value == UnoCard.Value.Wild) {
+			this.validColor = color;
+			cardToRemove = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild).toString();
+			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four));
+						
+		} else if (value == UnoCard.Value.Wild_Four) {
+			this.validColor = color;
+			cardToRemove = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four).toString();
+			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild));
+			topCard = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four).toString();
+			this.drawCallBack(userID,4);
+						
+		} else if (value == UnoCard.Value.DrawTwo) {
+			this.validColor = color;
+			this.validValue = value;
+			this.stockPile.add(new UnoCard(color, value));
+			cardToRemove = new UnoCard(color, value).toString();
+			topCard = new UnoCard(validColor, validValue).toString();
+			drawCallBack(userID, 2);
 		} else {
 			this.validColor = color;
 			this.validValue = value;
@@ -262,36 +303,46 @@ public class Game {
 						currentPlayer--;
 				}
 			}
-
-			if (this.gameDirection) {
-				currentPlayer = (currentPlayer + 1) % playerIDs.size();
-			} else {
-				if (currentPlayer == 0)
-					currentPlayer = playerIDs.size() - 1;
-				else
-					currentPlayer--;
-			}
-
-			if (!this.gameDirection) {
-				gameDirection = "Foward";
-			} else {
-				gameDirection = "Backwards";
-			}
-
+			
+			// Adds placed card to stockpile
+			stockPile.add(new UnoCard(color, value));
 			cardToRemove = new UnoCard(color, value).toString();
-			requestSentBy = userID;
-			message = "Player " + userID + " put down card";// doesnt specify which one
 			topCard = new UnoCard(validColor, validValue).toString();
-			nextPlayer = this.playerIDs.get(currentPlayer);
-
 		}
-		// Adds placed card to stockpile
-		stockPile.add(new UnoCard(color, value));
-
-		return "{" + "\"type\" : \"content-change\"," + "\"contentChangeType\" : \"takeTurnCallback\","
-				+ "\"topCard\" : \"" + topCard + "\"," + "\"nextPlayer\" : \"" + nextPlayer + "\","
-				+ "\"requestSentBy\" : \"" + requestSentBy + "\"," + "\"message\" : \"" + message + "\","
-				+ "\"gameDirection\" : \"" + gameDirection + "\"," + "\"cardToRemoveID\" : \"" + cardToRemove + "\""
+		
+		// Next player's turn
+		if (this.gameDirection)
+		{
+			currentPlayer = (currentPlayer + 1)%playerIDs.size();
+		}
+		else
+		{
+			if (currentPlayer == 0)
+				currentPlayer = playerIDs.size() - 1;
+			else
+				currentPlayer--;
+		}
+		
+		// CallBack Information
+		if (!this.gameDirection) {
+			gameDirection = "Foward";
+		} else {
+			gameDirection = "Backwards";
+		}
+		
+		requestSentBy = userID;
+		message = "Player " + userID + " put down card";// doesnt specify which one
+		nextPlayer = this.playerIDs.get(currentPlayer);
+		
+		return "{"
+				+ "\"type\" : \"content-change\","
+				+ "\"contentChangeType\" : \"takeTurnCallback\","
+				+ "\"topCard\" : \"" + topCard + "\","
+				+ "\"nextPlayer\" : \"" + nextPlayer + "\","
+				+ "\"requestSentBy\" : \"" + requestSentBy + "\","
+				+ "\"message\" : \"" + message + "\","
+				+ "\"gameDirection\" : \"" + gameDirection + "\","
+				+ "\"cardToRemoveID\" : \"" + cardToRemove + "\""
 				+ "}";
 
 	}
@@ -478,7 +529,7 @@ public class Game {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		for (int i = 0; i < sessions.size() - 1; i++) {
 			try {
 				sessions.get(i).getBasicRemote().sendText(newUserInformation);
