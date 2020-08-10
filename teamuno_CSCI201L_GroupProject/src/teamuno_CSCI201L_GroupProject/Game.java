@@ -187,7 +187,8 @@ public class Game {
 	}
 	
 	public boolean isValidCardPlay(UnoCard card) {
-		return card.getColor() == validColor || card.getValue() == validValue;
+		return card.getValue() == UnoCard.Value.Wild || card.getValue() == UnoCard.Value.Wild_Four ||
+				card.getColor() == validColor || card.getValue() == validValue;
 	}
 	
 	public boolean checkPlayerTurn(String pid) {
@@ -250,8 +251,11 @@ public class Game {
 		
 		System.out.println("takeTurn: "+ new UnoCard(color, value).toString());
 		
-		if (color == UnoCard.Color.Wild) {
-			
+		if (value == UnoCard.Value.Wild) {
+			this.validColor = color;
+			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four));
+		} else if (value == UnoCard.Value.Wild_Four) {
+			this.validColor = color;
 		}
 		else {
 			this.validColor = color;
@@ -284,25 +288,23 @@ public class Game {
 				else
 					currentPlayer--;
 			}
-			
-			
-			
-			if (!this.gameDirection) {
-				gameDirection = "Foward";
-			} else {
-				gameDirection = "Backwards";
-			}
-			
-			
-			cardToRemove = new UnoCard(color, value).toString();
-			requestSentBy = userID;
-			message = "Player " + userID + " put down card";// doesnt specify which one
-			topCard = new UnoCard(validColor, validValue).toString();
-			nextPlayer = this.playerIDs.get(currentPlayer);
-			
+			// Adds placed card to stockpile
+			stockPile.add(new UnoCard(color, value));
 		}
-		// Adds placed card to stockpile
-		stockPile.add(new UnoCard(color, value));
+		
+		// CallBack Information
+		if (!this.gameDirection) {
+			gameDirection = "Foward";
+		} else {
+			gameDirection = "Backwards";
+		}
+		
+		
+		cardToRemove = new UnoCard(color, value).toString();
+		requestSentBy = userID;
+		message = "Player " + userID + " put down card";// doesnt specify which one
+		topCard = new UnoCard(validColor, validValue).toString();
+		nextPlayer = this.playerIDs.get(currentPlayer);
 		
 		return "{"
 				+ "\"type\" : \"content-change\","
@@ -508,7 +510,7 @@ public class Game {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		for (int i = 0; i < sessions.size() - 1; i++) {
 			try {
 				sessions.get(i).getBasicRemote().sendText(newUserInformation);

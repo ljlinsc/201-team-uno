@@ -185,85 +185,82 @@ function placeCard(card) {
 	// Determine card color and value
 	// CHECK IF WE ARE INCLUDING DRAW TWO COLORED!!!!
 	previousCardDraw = card;
-	var color;
-	var value;
 	var title = card.title;
-	if (title.includes("Blue")) {
-		color = "Blue";
-	} else if (title.includes("Red")) {
-		color = "Red";
-	} else if (title.includes("Yellow")) {
-		color = "Yellow";
-	} else if (title.includes("Green")) {
-		color = "Green";
+
+	if (title.includes("Wild_Four")) {
+		console.log("Wild_Four");
+		var wildFour = document.getElementsByClassName("selectWildFourCard")[0];
+		wildFour.style.display  = "block";
+		console.log("Wild_Four: " + wildFour.style.display);
+
 	} else if (title.includes("Wild")) {
-		color = "Wild";
+		var wild = document.getElementsByClassName("selectWildCard")[0];
+		wild.style.display = "block";
+		console.log("Wild: " + wild.style.display);
+	} else {
+		console.log("cardColor="+color +" value="+value);
+		
+		var playerID = document.getElementById("playerID").innerHTML;
+		var roomID = document.getElementById("gameRoomID").innerHTML;
+		var color;
+		var value;
+		var title = card.title;
+		if (title.includes("Blue")) {
+			color = "Blue";
+		} else if (title.includes("Red")) {
+			color = "Red";
+		} else if (title.includes("Yellow")) {
+			color = "Yellow";
+		} else if (title.includes("Green")) {
+			color = "Green";
+		} else if (title.includes("Wild")) {
+			color = "Wild";
+		}
+		
+		if (title.includes("Zero")) {
+			value = "Zero";
+		} else if (title.includes("One")) {
+			value = "One";
+		} else if (title.includes("Two")) {
+			value = "Two";
+		} else if (title.includes("Three")) {
+			value = "Three";
+		} else if (title.includes("Four")) {
+			value = "Four";
+		} else if (title.includes("Five")) {
+			value = "Five";
+		} else if (title.includes("Six")) {
+			value = "Six";
+		} else if (title.includes("Seven")) {
+			value = "Seven";
+		} else if (title.includes("Eight")) {
+			value = "Eight";
+		} else if (title.includes("Nine")) {
+			value = "Nine";
+		} else if (title.includes("Ten")) {
+			value = "Ten";
+		} else if (title.includes("Reverse")) {
+			value = "Reverse";
+		} else if (title.includes("Skip")) {
+			value = "Skip";
+		} else if (title.includes("Wild_Four")) {
+			value = "Wild_Four";
+		} else if (title.includes("Wild")) {
+			value = "Wild";
+		}
+		
+		// Send data through socket
+		var playCardInstructions = {
+				"action" : "makeTurn",
+				"username" : playerID,
+				"nickname" : playerID,
+				"roomID" : roomID,
+				"cardColor" : color,
+				"cardValue" : value
+		}
+		game.socket.send(JSON.stringify(playCardInstructions));
 	}
 	
-	if (title.includes("Zero")) {
-		value = "Zero";
-	} else if (title.includes("One")) {
-		value = "One";
-	} else if (title.includes("Two")) {
-		value = "Two";
-	} else if (title.includes("Three")) {
-		value = "Three";
-	} else if (title.includes("Four")) {
-		value = "Four";
-	} else if (title.includes("Five")) {
-		value = "Five";
-	} else if (title.includes("Six")) {
-		value = "Six";
-	} else if (title.includes("Seven")) {
-		value = "Seven";
-	} else if (title.includes("Eight")) {
-		value = "Eight";
-	} else if (title.includes("Nine")) {
-		value = "Nine";
-	} else if (title.includes("Ten")) {
-		value = "Ten";
-	} else if (title.includes("Reverse")) {
-		value = "Reverse";
-	} else if (title.includes("Skip")) {
-		value = "Skip";
-	} else if (title.includes("Wild_Four")) {
-		value = "Wild_Four";
-	} else if (title.includes("Wild")) {
-		value = "Wild";
-	}
-	
-	console.log("cardColor="+color +" value="+value);
-	
-//	switch(title) {
-//		case "Blue_One":
-//			break;
-//		case "Blue_Two":
-//			break;
-//		case "Blue_Three":
-//			break;
-//		case "Blue_Four":
-//			break;
-//		case "Blue_Five":
-//			break;
-//		case "Blue_Six":
-//			break;
-//		case "Blue_Seven":
-//			break;
-//		case "Blue_Nine":
-//			break;
-//		case "Blue_
-//	}
-	var playerID = document.getElementById("playerID").innerHTML;
-	var roomID = document.getElementById("gameRoomID").innerHTML;
-	var playCardInstructions = {
-			"action" : "makeTurn",
-			"username" : playerID,
-			"nickname" : playerID,
-			"roomID" : roomID,
-			"cardColor" : color,
-			"cardValue" : value
-	}
-	game.socket.send(JSON.stringify(playCardInstructions));
 }
 
 /**CallBack function from Server initiating cards for all players
@@ -409,4 +406,68 @@ function joinGame() {
 
 function uno() {
 	game.socket.send("uno");
+}
+
+function playWild(cardSelection) {
+	var color;
+	var value = "Wild";
+	
+	if (cardSelection === 'Red') {
+		color = "Red";
+	} else if (cardSelection === 'Blue') {
+		color = "Blue";
+	} else if (cardSelection === 'Yellow') {
+		color = "Yellow";
+	} else if (cardSelection === 'Green') {
+		color = "Green;"
+	}
+	
+	var playerID = document.getElementById("playerID").innerHTML;
+	var roomID = document.getElementById("gameRoomID").innerHTML;
+	var playCardInstructions = {
+			"action" : "makeTurn",
+			"username" : playerID,
+			"nickname" : playerID,
+			"roomID" : roomID,
+			"cardColor" : color,
+			"cardValue" : value
+	}
+	
+	
+	var wildFour = document.getElementById("selectWildFourCard");
+	wildFour.style.display = "none";
+	game.socket.send(JSON.stringify(playCardInstructions));
+	
+	var wild = document.getElementsByClassName("selectWildCard")[0];
+	wild.style.display = "none";
+ }
+
+function playWildFour(cardSelection) {
+	var color;
+	var value = "Wild_Four";
+	
+	if (cardSelection === 'Red') {
+		color = "Red";
+	} else if (cardSelection === 'Blue') {
+		color = "Blue";
+	} else if (cardSelection === 'Yellow') {
+		color = "Yellow";
+	} else if (cardSelection === 'Green') {
+		color = "Green;"
+	}
+	var playerID = document.getElementById("playerID").innerHTML;
+	var roomID = document.getElementById("gameRoomID").innerHTML;
+	var playCardInstructions = {
+			"action" : "makeTurn",
+			"username" : playerID,
+			"nickname" : playerID,
+			"roomID" : roomID,
+			"cardColor" : color,
+			"cardValue" : value
+	}
+	
+	
+	var wildFour = document.getElementsByClassName("selectWildFourCard")[0];
+	wildFour.style.display = "none";
+	game.socket.send(JSON.stringify(playCardInstructions));
 }
