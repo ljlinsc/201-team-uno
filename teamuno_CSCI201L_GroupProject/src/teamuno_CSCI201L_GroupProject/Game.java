@@ -267,6 +267,7 @@ public class Game {
 		String cardToRemove = null;
 		
 		System.out.println("takeTurn: "+ new UnoCard(color, value).toString());
+		System.out.println("currentPlayer: " + playerIDs.get(currentPlayer) + " index="+currentPlayer);
 		
 		if (value == UnoCard.Value.Wild) {
 			this.validColor = color;
@@ -294,6 +295,7 @@ public class Game {
 			if (UnoCard.Value.Reverse == value) {
 				this.gameDirection ^= true;
 			} else if (UnoCard.Value.Skip == value) {
+				
 				if (this.gameDirection) {
 					currentPlayer = (currentPlayer + 1) % playerIDs.size();
 				} else {
@@ -310,24 +312,30 @@ public class Game {
 			topCard = new UnoCard(validColor, validValue).toString();
 		}
 		
-		// Next player's turn
-		if (this.gameDirection)
-		{
-			currentPlayer = (currentPlayer + 1)%playerIDs.size();
-		}
-		else
-		{
-			if (currentPlayer == 0)
-				currentPlayer = playerIDs.size() - 1;
-			else
-				currentPlayer--;
-		}
+		System.out.println("nextPlayer: " + playerIDs.get(currentPlayer) + " index="+currentPlayer);
 		
 		// CallBack Information
 		if (!this.gameDirection) {
 			gameDirection = "Foward";
 		} else {
 			gameDirection = "Backwards";
+		}
+		
+		// Next Player
+		if (!this.gameDirection) {
+			if (currentPlayer == playerIDs.size()-1)
+			{
+				currentPlayer = 0;
+			} else {
+				currentPlayer++;
+			}
+
+		} else {
+			if (currentPlayer == 0) {
+				currentPlayer = playerIDs.size() - 1;
+			} else {
+				currentPlayer--;
+			}
 		}
 		
 		requestSentBy = userID;
