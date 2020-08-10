@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.websocket.Session;
 
-import game.Card;
-
 public class User {
 	private String username; // Used as ID for Registered Users
 	private String nickname; // Used as ID for Not Registered Users
