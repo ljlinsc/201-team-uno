@@ -34,9 +34,6 @@ if (createGame != null && createGame.equals("true")) {
 		<div class="game-info">
 			Game Room ID: <span id="gameRoomID"><%=theRoomID%></span>
 		</div>
-		<!-- Do we need this? <div class="game-info">
-			Time: <span id="time">0</span>
-		</div> -->
 		<div class="game-info">
 				Current Player: <span id="currentPlayer"></span>
 		</div>

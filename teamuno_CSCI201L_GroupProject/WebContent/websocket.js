@@ -276,6 +276,7 @@ function placeCard(card) {
  */
 function initCards(JSONData) {
 	console.log("initCards()");
+	document.getElementById("readyButton").style.display = "none";
 	var cardHolder = document.getElementsByClassName("game-container");
 	
 	var cardData = 
@@ -382,6 +383,7 @@ function ready() {
 			"nickname" : playerID,
 			"roomID" : roomID
 	}
+	document.getElementById("readyButton").style.backgroundColor = "#55aa55";
 	game.socket.send(JSON.stringify(readyRequest));
 }
 
@@ -404,6 +406,7 @@ function joinGame() {
 			"roomID" : gameID
 	}
 	console.log(gameID + "sending..." + joinInstructions);
+	document.getElementById("joinButton").style.display = "none";
 	game.sendMessage(JSON.stringify(joinInstructions));
 }
 
