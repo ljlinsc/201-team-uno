@@ -31,8 +31,9 @@ public class SignInServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
 			next = "/lobby.jsp";
+		} else {
+			request.setAttribute("message", "invalid user/pass");
 		}
-		request.setAttribute("message", "invalid user/pass");
 		RequestDispatcher dispatch = getServletContext().getRequestDispatcher(next);
 		dispatch.forward(request, response);
 	}

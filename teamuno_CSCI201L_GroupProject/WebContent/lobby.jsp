@@ -39,12 +39,11 @@
 			<div class="enter-game">
 				<p class="header">Enter an existing game room:</p>
 				<form name="enter-game-room" method="POST" action="EnterGameServlet">
-					<input class="gray-text-input" type="text"
-						placeholder="hexadecimal code" name="game-id" /> <input
-						class="submit" type="submit" name="game-code-submit" value="Enter" />
+					<input class="gray-text-input" type="text" placeholder="hexadecimal code" name="game-id" />
+					<p class="invalid">${enterGameRoomMessage}</>
+					<input class="submit" type="submit" name="game-code-submit" value="Enter" />
 				</form>
 			</div>
-			<b>${message}</b>
 		</div>
 	</div>
 </body>
