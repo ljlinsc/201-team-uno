@@ -514,22 +514,27 @@ public class Game {
 		}
 		playerHand.add(new Vector<UnoCard>());
 		sessions.add(user.getSession());
-
-		// Tell other users that new user was added
-		String newUserID = user.getUsername();
-		String newUserInformation = "{" + "		\"type\" : \"content-change\",\n"
-				+ "		\"contentChangeType\" : \"newUser\",\n" + "		\"newUserID\" : \"" + newUserID + "\"" + "	}";
-		String currentPlayerInformation = "{" + "		\"type\" : \"content-change\",\n"
-				+ "		\"contentChangeType\" : \"currentPlayer\",\n" + "		\"currentPlayer\" : \""
-				+ playerIDs.get(0) + "\"" + "	}";
-
+		
+		// Tell newly added User current player
+		String currentPlayerInformation = "{" + 
+				"		\"type\" : \"content-change\",\n" + 
+				"		\"contentChangeType\" : \"currentPlayer\",\n" + 
+				"		\"currentPlayer\" : \"" + playerIDs.get(0) + "\"" + 
+				"	}";
 		try {
-			sessions.get(sessions.size() - 1).getBasicRemote().sendText(currentPlayerInformation);
+			sessions.get(sessions.size()-1).getBasicRemote().sendText(currentPlayerInformation);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+		// Tell other users that new user was added
+		String newUserID = user.getUsername();
+		String newUserInformation = "{" + "		\"type\" : \"content-change\",\n"
+				+ "		\"contentChangeType\" : \"newUser\",\n" + 
+				"		\"newUserID\" : \"" + newUserID + "\"" + 
+				"	}";
+		// Add new User to everyone else
 		for (int i = 0; i < sessions.size() - 1; i++) {
 			try {
 				sessions.get(i).getBasicRemote().sendText(newUserInformation);
@@ -538,6 +543,23 @@ public class Game {
 				e.printStackTrace();
 			}
 		}
+
+
+		// Add everyone else's information to user
+		for (int i = 0; i < sessions.size()-1; i++) {
+			String playersInformation = "{" + 
+					"		\"type\" : \"content-change\",\n" + 
+					"		\"contentChangeType\" : \"newUser\",\n" + 
+					"		\"newUserID\" : \"" + playerIDs.get(i) + "\"" + 
+					"	}";
+			try {
+				sessions.get(sessions.size()-1).getBasicRemote().sendText(playersInformation);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 	public User getUserByUsername(String username) {
