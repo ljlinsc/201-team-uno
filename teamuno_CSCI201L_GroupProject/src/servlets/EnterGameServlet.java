@@ -54,7 +54,7 @@ public class EnterGameServlet extends HttpServlet {
 			next_page = "/game.jsp?roomID="+roomID;
 		}
 		else {
-			request.setAttribute("message", "Error game room code invalid.");
+			request.setAttribute("enterGameRoomMessage", "invalid game room code");
 			next_page = "/lobby.jsp";
 		}
 		
