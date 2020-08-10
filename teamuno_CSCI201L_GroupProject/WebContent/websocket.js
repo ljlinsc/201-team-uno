@@ -96,7 +96,7 @@
  * 
  * 
  */
-var connectionURL = "ws://localhost:8080/teamuno_CSCI201L_GroupProject/RoomSocket";
+var connectionURL = "ws://localhost:8083/teamuno_CSCI201L_GroupProject/RoomSocket";
 class GameWebSocket{
 	constructor(URL){
 		this.socket = new WebSocket(URL);

@@ -21,7 +21,6 @@ import javax.websocket.Session;
 
 import org.json.simple.JSONObject;
 
-import game.ServerRoom;
 /*
  * Format of JSON Messages:
  * {
@@ -126,9 +125,6 @@ public class RoomSocket {
 	}
 	@OnOpen
 	public void open(Session session) {
-		if (rooms.isEmpty()) {
-			rooms.put("1x1x1x", new Game("1x1x1x"));
-		}
 		
 		System.out.println("Connection made!");
 		
