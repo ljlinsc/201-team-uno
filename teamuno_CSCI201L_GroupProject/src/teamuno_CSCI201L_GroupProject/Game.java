@@ -273,6 +273,7 @@ public class Game {
 			this.validColor = color;
 			cardToRemove = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild).toString();
 			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four));
+			topCard = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild).toString();
 						
 		} else if (value == UnoCard.Value.Wild_Four) {
 			this.validColor = color;
