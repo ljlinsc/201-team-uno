@@ -21,7 +21,6 @@ import javax.websocket.Session;
 
 import org.json.simple.JSONObject;
 
-import game.ServerRoom;
 /*
  * Format of JSON Messages:
  * {

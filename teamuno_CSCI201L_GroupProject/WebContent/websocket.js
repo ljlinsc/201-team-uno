@@ -197,9 +197,7 @@ function placeCard(card) {
 		var wild = document.getElementsByClassName("selectWildCard")[0];
 		wild.style.display = "block";
 		console.log("Wild: " + wild.style.display);
-	} else {
-		console.log("cardColor="+color +" value="+value);
-		
+	} else {		
 		var playerID = document.getElementById("playerID").innerHTML;
 		var roomID = document.getElementById("gameRoomID").innerHTML;
 		var color;
@@ -217,7 +215,9 @@ function placeCard(card) {
 			color = "Wild";
 		}
 		
-		if (title.includes("Zero")) {
+		if (title.includes("DrawTwo")) {
+			value = "DrawTwo";
+		} else if (title.includes("Zero")) {
 			value = "Zero";
 		} else if (title.includes("One")) {
 			value = "One";
@@ -258,6 +258,7 @@ function placeCard(card) {
 				"cardColor" : color,
 				"cardValue" : value
 		}
+		console.log("cardColor="+color +" value="+value);
 		game.socket.send(JSON.stringify(playCardInstructions));
 	}
 	
@@ -432,14 +433,10 @@ function playWild(cardSelection) {
 			"cardColor" : color,
 			"cardValue" : value
 	}
-	
-	
-	var wildFour = document.getElementById("selectWildFourCard");
-	wildFour.style.display = "none";
-	game.socket.send(JSON.stringify(playCardInstructions));
-	
+		
 	var wild = document.getElementsByClassName("selectWildCard")[0];
 	wild.style.display = "none";
+	game.socket.send(JSON.stringify(playCardInstructions));
  }
 
 function playWildFour(cardSelection) {
