@@ -126,9 +126,6 @@ public class RoomSocket {
 	}
 	@OnOpen
 	public void open(Session session) {
-		if (rooms.isEmpty()) {
-			rooms.put("1x1x1x", new Game("1x1x1x"));
-		}
 		
 		System.out.println("Connection made!");
 		
