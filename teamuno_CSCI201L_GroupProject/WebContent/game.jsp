@@ -3,6 +3,8 @@
 <head>
 <title>UNO</title>
 <meta charset="ISO-8859-1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <link
 	href="https://fonts.googleapis.com/css2?family=Varta:wght@300;400;600&display=swap"
 	rel="stylesheet">
@@ -163,7 +165,7 @@ if (createGame != null && createGame.equals("true")) {
 	<div class="game-container game-buttons">
 		<button id="joinButton" onclick="joinGame()">Join</button>
 		<button id="readyButton" onclick="ready()">Ready</button>
-		<button id="drawButton" onclick="draw()">Draw</button>
+		<button id="drawButton" onclick="draw()" >Draw</button>
 		<button id="unoButton" onclick="uno()">Uno!</button>
 	</div>
 
