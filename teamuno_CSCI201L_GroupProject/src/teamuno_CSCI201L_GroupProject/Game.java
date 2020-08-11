@@ -268,6 +268,22 @@ public class Game {
 		
 		System.out.println("takeTurn: "+ new UnoCard(color, value).toString());
 		System.out.println("currentPlayer: " + playerIDs.get(currentPlayer) + " index="+currentPlayer);
+		// Next Player
+		if (!this.gameDirection) {
+			if (currentPlayer == playerIDs.size()-1)
+			{
+				currentPlayer = 0;
+			} else {
+				currentPlayer++;
+			}
+
+		} else {
+			if (currentPlayer == 0) {
+				currentPlayer = playerIDs.size() - 1;
+			} else {
+				currentPlayer--;
+			}
+		}
 		
 		if (value == UnoCard.Value.Wild) {
 			this.validColor = color;
@@ -280,7 +296,7 @@ public class Game {
 			cardToRemove = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four).toString();
 			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild));
 			topCard = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four).toString();
-			this.drawCallBack(userID,4);
+			this.drawCallBack(playerIDs.get(currentPlayer),4);
 						
 		} else if (value == UnoCard.Value.DrawTwo) {
 			this.validColor = color;
@@ -322,22 +338,6 @@ public class Game {
 			gameDirection = "Backwards";
 		}
 		
-		// Next Player
-		if (!this.gameDirection) {
-			if (currentPlayer == playerIDs.size()-1)
-			{
-				currentPlayer = 0;
-			} else {
-				currentPlayer++;
-			}
-
-		} else {
-			if (currentPlayer == 0) {
-				currentPlayer = playerIDs.size() - 1;
-			} else {
-				currentPlayer--;
-			}
-		}
 		
 		requestSentBy = userID;
 		message = "Player " + userID + " put down card";// doesnt specify which one
