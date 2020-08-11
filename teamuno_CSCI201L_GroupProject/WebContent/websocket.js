@@ -439,7 +439,7 @@ function playWild(cardSelection) {
 	} else if (cardSelection === 'Yellow') {
 		color = "Yellow";
 	} else if (cardSelection === 'Green') {
-		color = "Green;"
+		color = "Green";
 	}
 	
 	var playerID = document.getElementById("playerID").innerHTML;
@@ -469,7 +469,7 @@ function playWildFour(cardSelection) {
 	} else if (cardSelection === 'Yellow') {
 		color = "Yellow";
 	} else if (cardSelection === 'Green') {
-		color = "Green;"
+		color = "Green";
 	}
 	var playerID = document.getElementById("playerID").innerHTML;
 	var roomID = document.getElementById("gameRoomID").innerHTML;
