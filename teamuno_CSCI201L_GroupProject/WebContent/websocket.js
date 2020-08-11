@@ -122,25 +122,14 @@ var game;
  * REPONSE FUNCTIONS (MESSAGES FROM SERVER)
  */
 /*
-	REPONSE FORMAT FROM SERVER
-	{
-		"type" : String, [valid values = "error", "content-change"]
-		message : String,
-		"contentChangeType" : "addCard" "changeTopCard" "drawCard" "newUser"
-	}
-	// When a user puts down a card successfully
-	// Send to all users
-	{
-	
-	}
-	
-	"newUser"
-	{
-		"type" : "content-change",
-		"contentChangeType" : "newUser",
-		"newUserID" : String (userid)
-	}
-*/
+ * REPONSE FORMAT FROM SERVER { "type" : String, [valid values = "error",
+ * "content-change"] message : String, "contentChangeType" : "addCard"
+ * "changeTopCard" "drawCard" "newUser" } // When a user puts down a card
+ * successfully // Send to all users { }
+ * 
+ * "newUser" { "type" : "content-change", "contentChangeType" : "newUser",
+ * "newUserID" : String (userid) }
+ */
 function processMessage(message) {
 	var text = JSON.parse(message);
 	if (text.type === "error") {
@@ -168,18 +157,45 @@ function processMessage(message) {
 		
 	}
 }
+function checkIfYourTurn(){
+	var username = document.getElementById("playerID").innerHTML;
+	var currentPlay = document.getElementById("currentPlayer").innerHTML
+	if(username != currentPlay){
+		$('#drawButton').attr('disabled',true);
+		$('#drawButton').attr('title',"Not your turn.");
+		$('#drawButton').css('opacity',"0.5");
+		$('#drawButton').css('cursor',"not-allowed");
+		$('#unoButton').attr('disabled',true);
+		$('#unoButton').attr('title',"Not your turn.");
+		$('#unoButton').css('opacity',"0.5");
+		$('#unoButton').css('cursor',"not-allowed");
+	}
+	else{
+		$('#drawButton').attr('disabled',false);
+		$('#drawButton').attr('title',"");
+		$('#drawButton').css('opacity',"1");
+		$('#drawButton').css('cursor',"pointer");
+		$('#unoButton').attr('disabled',false);
+		$('#unoButton').attr('title',"");
+		$('#unoButton').css('opacity',"1");
+		$('#unoButton').css('cursor',"pointer");
+	}
+}
+setInterval(checkIfYourTurn, 100);
 
 function draw() {
 	console.log("draw()");
 	var username = document.getElementById("playerID").innerHTML;
 	var roomID = document.getElementById("gameRoomID").innerHTML;
-	var data = {
-			"action" : "draw",
-			"username" : username,
-			"nickname" : username,
-			"roomID" : roomID
-	};
-	game.socket.send(JSON.stringify(data));
+	var currentPlay = document.getElementById("currentPlayer").innerHTML;
+
+		var data = {
+				"action" : "draw",
+				"username" : username,
+				"nickname" : username,
+				"roomID" : roomID
+		};
+		game.socket.send(JSON.stringify(data));
 }
 
 
@@ -267,11 +283,10 @@ function placeCard(card) {
 	
 }
 
-/**CallBack function from Server initiating cards for all players
- * {
- * 	"action" : "initCards",
- * 	"message" : [cardPNG]
- * }
+/**
+ * CallBack function from Server initiating cards for all players { "action" :
+ * "initCards", "message" : [cardPNG] }
+ * 
  * @param JSONData
  * @returns
  */
@@ -310,15 +325,15 @@ function takeTurnCallback(HTMLData) {
 	// Remove card from the player that put down that card on Screen
 	if (playerID === requestSentBy) {
 		previousCardDraw.remove();
-//		var cardsWithClassName = document.getElementsByClassName(cardToRemove);
-//		cardsWithClassName[0].remove(cardsWithClassName[0].selectedIndex);
+// var cardsWithClassName = document.getElementsByClassName(cardToRemove);
+// cardsWithClassName[0].remove(cardsWithClassName[0].selectedIndex);
 	}
 	
 	// Update next player on Screen
 	document.getElementById("currentPlayer").innerHTML = nextPlayer;
 	
 	// tell player if it's their turn
-//	Turn: <span id="players_turn"></span>
+// Turn: <span id="players_turn"></span>
 	console.log("HEEEEEEEEEEEEERRRRRRRRR___________________" + nextPlayer + playerID);
 	if (nextPlayer == playerID){
 		document.getElementById("players_turn").innerHTML = "YOUR TURN";
@@ -383,8 +398,7 @@ function addNewPlayer(JSONData) {
 	gamePlayerContainer.innerHTML += playerData;
 }
 /*
- * REQUEST FUNCTIONS
- * User requests an action to the server
+ * REQUEST FUNCTIONS User requests an action to the server
  */
 function ready() {
 	console.log("ready()");
