@@ -160,7 +160,10 @@ function processMessage(message) {
 		} else if (text.contentChangeType === "currentPlayer") {
 			changeCurrentPlayer(text);
 		}
-	}  else {
+	} else if (text.type === "notification") {
+			openNotification(text.message);
+	}
+	else {
 		console.log("from processMessage(): Could not recongnize message type " + text.type);
 		
 	}
@@ -475,4 +478,13 @@ function playWildFour(cardSelection) {
 function closePopUp(ID) {
 	var popup = document.getElementsByClassName(ID)[0];
 	popup.style.display = "none";
+}
+
+function openNotification(message) {
+	document.getElementById("notificationText").innerHTML = message;
+	document.getElementsByClassName("notification")[0].style.display = "block";
+}
+
+function closeNotification() {
+	document.getElementsByClassName("notification")[0].style.display = "none";
 }

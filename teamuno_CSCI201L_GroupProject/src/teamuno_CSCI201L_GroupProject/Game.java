@@ -249,6 +249,7 @@ public class Game {
 			+ "}";
 			
 			try {
+				System.out.println("drawCallBack: " + message);
 				sessions.get(playerIDs.indexOf(userID)).getBasicRemote().sendText(message);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -290,6 +291,10 @@ public class Game {
 			cardToRemove = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild).toString();
 			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four));
 			topCard = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild).toString();
+			this.broadcastMessage("{"
+					+ "\"type\" : \"notification\","
+					+ "\"message\" : \""+userID+" has used wild card, setting color to " + color +"\""
+					+ "}");
 						
 		} else if (value == UnoCard.Value.Wild_Four) {
 			this.validColor = color;
@@ -297,13 +302,17 @@ public class Game {
 			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild));
 			topCard = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four).toString();
 			this.drawCallBack(playerIDs.get(currentPlayer),4);
+			this.broadcastMessage("{"
+					+ "\"type\" : \"notification\","
+					+ "\"message\" : \""+userID+" has used wild four card, setting color to " + color +"\""
+					+ "}");
 						
 		} else if (value == UnoCard.Value.DrawTwo) {
 			this.validColor = color;
 			this.validValue = value;
 			this.stockPile.add(new UnoCard(color, value));
 			cardToRemove = new UnoCard(color, value).toString();
-			topCard = new UnoCard(validColor, validValue).toString();
+			topCard = new UnoCard(color, value).toString();
 			drawCallBack(playerIDs.get(currentPlayer), 2);
 		} else {
 			this.validColor = color;
@@ -626,6 +635,8 @@ class Action {
 	public UnoCard.Value getCardValue() {
 		if (cardValue.equals("Zero")) {
 			return UnoCard.Value.Zero;
+		} else if(cardValue.equals("DrawTwo")) {
+			return UnoCard.Value.DrawTwo;
 		} else if (cardValue.equals("One")) {
 			return UnoCard.Value.One;
 		} else if (cardValue.equals("Two")) {

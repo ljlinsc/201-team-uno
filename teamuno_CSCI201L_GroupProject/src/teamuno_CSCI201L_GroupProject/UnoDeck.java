@@ -77,6 +77,11 @@ public class UnoDeck {
 				cards.add(new UnoCard(UnoCard.Color.Wild, value));
 			}
 		}
+		
+		System.out.print("Cards added: ");
+		for (UnoCard c : cards) {
+			System.out.println(c.toString());
+		}
 	}
 	
 	public void shuffle() {      
@@ -84,8 +89,12 @@ public class UnoDeck {
 		Random random = new Random();
 		random.nextInt();
 		for (int i = 0; i < cards.size(); i++) {
-			int randomValue = i + random.nextInt(n - i);
+			int randomValue = random.nextInt(n);
 			swap(cards, i, randomValue);
+		}
+		System.out.println("Cards after shuffling");
+		for (UnoCard c : cards) {
+			System.out.println(c.toString());
 		}
 	}
 	
@@ -107,7 +116,7 @@ public class UnoDeck {
 		if (isEmpty()) {
 			throw new IllegalArgumentException("Cannot draw card since there are no cards left");
 		}
-		return cards.get(cardsInDeck--);
+		return cards.get(--cardsInDeck);
 	}
 	
 	public String topCardImage() throws IllegalArgumentException {
@@ -129,7 +138,8 @@ public class UnoDeck {
 		Vector<UnoCard> ret = new Vector<UnoCard>();
 		
 		for (int i = 0; i < n; i++) {
-			ret.add(cards.get(--cardsInDeck));
+			ret.add(cards.remove(cards.size()-1));
+			cardsInDeck--;
 		}
 		return ret;
 	}

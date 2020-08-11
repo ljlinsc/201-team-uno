@@ -70,6 +70,13 @@ if (createGame != null && createGame.equals("true")) {
 %>
 <body onload="connect()">
 	<!-- Used for popups  -->
+		<div id="myModal" class="modal notification">
+
+		<!-- Modal content -->
+		<div class="modal-content">
+			<span onclick="closeNotification()" class="close">&times;</span>
+		</div>
+	</div>
 	<!-- The Modal -->
 	<div id="myModal" class="modal selectWildCard">
 
