@@ -19,8 +19,7 @@ public class GameRoom {
 	private static HashMap<String, Game> rooms = new HashMap<String, Game>();
 	private static HashSet<String> GameRoomIDs = new HashSet<String>();
 	private String id;
-//	private Queue<ServerThread> Turns =  new LinkedList<>();
-
+	//	private Queue<ServerThread> Turns =  new LinkedList<>();
 
 	public GameRoom(String id) {
 		this.id = id;
@@ -29,23 +28,25 @@ public class GameRoom {
 		}
 	}
 	
-
 	public void initializeGame(String id) {
 		
 	}
+	
 	public void startGame(String id) {
 		
 	}
+	
 	public void broadcastMessage(Message m) {
 		if (m.message != null) {
 			for(Game threads : rooms.values()) {
-//					threads.sendMessage(m);
+				// threads.sendMessage(m);
 			}
 		}
 	}
+	
 	public void broadcastTurn() {
 		Message m = new Message();
-//		m.turn = Turns.poll().getUserName(); // get the first player in the turn queue
+		// m.turn = Turns.poll().getUserName(); // get the first player in the turn queue
 		m.message = "it is " + m.turn + "'s turn.";
 	}
 	

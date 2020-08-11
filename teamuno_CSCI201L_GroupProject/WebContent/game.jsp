@@ -27,12 +27,25 @@
 
 /* Modal Content/Box */
 .modal-content {
+	font-family: "Varta";
+	font-size: 24px;
+	font-weight: 300;
 	background-color: #fefefe;
 	margin: 15% auto; /* 15% from the top and centered */
 	padding: 20px;
 	border: 1px solid #888;
 	width: 80%; /* Could be more or less, depending on screen size */
 	align-content: center;
+	border-radius: 10px;
+}
+
+.modal-content p {
+	text-align: center;
+}
+
+.modal-content-buttons {
+	margin: auto;
+	width: 495px;
 }
 
 /* The Close Button */
@@ -77,10 +90,12 @@ if (createGame != null && createGame.equals("true")) {
 		<div class="modal-content">
 			<span onclick="closePopUp('selectWildCard')" class="close">&times;</span>
 			<p>Select your Wild Card color</p>
-			<button id="wildRedButton" onclick="playWild('Red')">RED</button>
-			<button id="wildBlueButton" onclick="playWild('Blue')">BLUE</button>
-			<button id="wildYellowButton" onclick="playWild('Yellow')">YELLOW</button>
-			<button id="wildGreenButton" onclick="playWild('Green')">GREEN</button>
+			<div class="modal-content-buttons">
+				<button id="wildRedButton" onclick="playWild('Red')">RED</button>
+				<button id="wildYellowButton" onclick="playWild('Yellow')">YELLOW</button>
+				<button id="wildGreenButton" onclick="playWild('Green')">GREEN</button>
+				<button id="wildBlueButton" onclick="playWild('Blue')">BLUE</button>
+			</div>
 
 		</div>
 	</div>
@@ -91,10 +106,12 @@ if (createGame != null && createGame.equals("true")) {
 		<div class="modal-content selectWildFourCard">
 			<span onclick="closePopUp('selectWildFourCard')"class="close">&times;</span>
 			<p>Select your Wild Four Card color</p>
-			<button id="wildRedButton" onclick="playWildFour('Red')">RED</button>
-			<button id="wildBlueButton" onclick="playWildFour('Blue')">BLUE</button>
-			<button id="wildYellowButton" onclick="playWildFour('Yellow')">YELLOW</button>
-			<button id="wildGreenButton" onclick="playWildFour('Green')">GREEN</button>
+			<div class="modal-content-buttons">
+				<button id="wildRedButton" onclick="playWildFour('Red')">RED</button>
+				<button id="wildYellowButton" onclick="playWildFour('Yellow')">YELLOW</button>
+				<button id="wildGreenButton" onclick="playWildFour('Green')">GREEN</button>
+				<button id="wildBlueButton" onclick="playWildFour('Blue')">BLUE</button>
+			</div>
 
 		</div>
 	</div>
