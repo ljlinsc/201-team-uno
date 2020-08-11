@@ -304,7 +304,7 @@ public class Game {
 			this.stockPile.add(new UnoCard(color, value));
 			cardToRemove = new UnoCard(color, value).toString();
 			topCard = new UnoCard(validColor, validValue).toString();
-			drawCallBack(userID, 2);
+			drawCallBack(playerIDs.get(currentPlayer), 2);
 		} else {
 			this.validColor = color;
 			this.validValue = value;
