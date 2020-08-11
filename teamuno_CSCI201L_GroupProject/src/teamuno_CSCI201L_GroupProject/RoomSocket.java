@@ -218,7 +218,7 @@ public class RoomSocket implements Serializable {
 					}
 				} 
 				// Cannot join game with max num players
-				else if (join_room.getUserCount() > 5) {
+				else if (join_room.getUserCount() > 4) {
 					String error = "{"
 							+ "\"type\" : \"error\","
 							+ "\"message\" : \"Game cannot have more than 5 players\""
