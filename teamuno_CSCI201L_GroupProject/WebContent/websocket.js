@@ -300,6 +300,8 @@ function takeTurnCallback(HTMLData) {
 	var requestSentBy = HTMLData.requestSentBy;
 	var gameDirection = HTMLData.gameDirection;
 	var cardToRemove = HTMLData.cardToRemove;
+
+		
 	
 	var playerID = document.getElementById("playerID").innerHTML;
 	
@@ -312,6 +314,15 @@ function takeTurnCallback(HTMLData) {
 	
 	// Update next player on Screen
 	document.getElementById("currentPlayer").innerHTML = nextPlayer;
+	
+	// tell player if it's their turn
+//	Turn: <span id="players_turn"></span>
+	console.log("HEEEEEEEEEEEEERRRRRRRRR___________________" + nextPlayer + playerID);
+	if (nextPlayer == playerID){
+		document.getElementById("players_turn").innerHTML = "YOUR TURN";
+	}
+	else document.getElementById("players_turn").innerHTML = "NOT YOUR TURN";
+	
 	
 	// Change Top Card
 	changeTopCard(topCard);

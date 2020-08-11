@@ -14,7 +14,7 @@ public class JDBC_Core {
 		User user = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); 
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/Users?user=root&password=root");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/Users?user=root&password=ZhuanX13&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC");
 			ps = conn.prepareStatement("SELECT * FROM UserInfo WHERE username=? AND password=?");
 			ps.setString(1, username); // set first variable in prepared statement
 			ps.setString(2, password);
@@ -53,7 +53,7 @@ public class JDBC_Core {
 		User user = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); 
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/Users?user=root&password=root");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/Users?user=root&password=ZhuanX13&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC");
 			ps1 = conn.prepareStatement("SELECT * FROM UserInfo WHERE username=?");
 			ps1.setString(1, username);
 			rs1 = ps1.executeQuery();

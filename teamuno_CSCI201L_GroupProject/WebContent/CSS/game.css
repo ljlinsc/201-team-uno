@@ -144,22 +144,22 @@ body {
 }
 
 #wildRedButton {
-	background-color: red;
-}
-
-#wildBlueButton {
-	background-color: blue;
+	background-color: #ff5555;
 }
 
 #wildYellowButton {
-	background-color: orange;
+	background-color: #ffaa00;
 }
 
 #wildGreenButton {
-	background-color: green;
+	background-color: #55aa55;
+}
+
+#wildBlueButton {
+	background-color: #5555ff;
 }
 
 .modal-content button:hover {
-	transform: scale(1.5); 
+	transform: scale(1.1); 
 	cursor: pointer;
 }
