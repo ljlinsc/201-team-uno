@@ -88,6 +88,7 @@ if (createGame != null && createGame.equals("true")) {
 		<!-- Modal content -->
 		<div class="modal-content">
 			<span onclick="closeNotification()" class="close">&times;</span>
+			<span id="notificationText"></span>
 		</div>
 	</div>
 	<!-- The Modal -->

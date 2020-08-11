@@ -437,7 +437,7 @@ function playWild(cardSelection) {
 	} else if (cardSelection === 'Yellow') {
 		color = "Yellow";
 	} else if (cardSelection === 'Green') {
-		color = "Green;"
+		color = "Green";
 	}
 	
 	var playerID = document.getElementById("playerID").innerHTML;
