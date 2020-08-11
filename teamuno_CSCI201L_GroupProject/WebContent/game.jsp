@@ -107,10 +107,13 @@ if (createGame != null && createGame.equals("true")) {
 			Game Room ID: <span id="gameRoomID"><%=theRoomID%></span>
 		</div>
 		<div class="game-info">
+			Turn: <span id="players_turn"></span>
+		</div>
+		<div class="game-info">
 			Current Player: <span id="currentPlayer"></span>
 		</div>
 		<div class="game-info">
-			Players: <span id="players">0</span>
+			Players: <span id="players"></span>
 		</div>
 		<div class="game-info-players">
 			<div class="game-info">
@@ -118,6 +121,8 @@ if (createGame != null && createGame.equals("true")) {
 						(YOU)</b></span>
 			</div>
 		</div>
+		
+
 	</div>
 
 	<!-- Contains the current top card and other player's card's backsides -->
