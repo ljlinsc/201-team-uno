@@ -26,6 +26,7 @@ public class Game {
 	private Vector<UnoCard> stockPile;
 
 	boolean gameDirection;
+	boolean finished;
 	private UnoCard.Value validValue;
 	private UnoCard.Color validColor;
 
@@ -39,6 +40,7 @@ public class Game {
 		System.out.println("Game (ID=" + id + ") creating new game");
 		this.players = new Vector<User>();
 		this.running = false;
+		this.finished = false;
 		this.gameID = id;
 		this.deck = new UnoDeck();
 		deck.shuffle();
@@ -55,6 +57,10 @@ public class Game {
 
 	public boolean isRunning() {
 		return running;
+	}
+	
+	public boolean isGameOver() {
+		return this.finished;
 	}
 
 	public void start() {
@@ -144,14 +150,10 @@ public class Game {
 		return getTopCard().toString();
 	}
 
-	public boolean isGameOver() {
-		for (String player : this.playerIDs) {
-			if (hasEmptyHand(player)) {
-				return true;
-			}
-		}
-		return false;
-	}
+	/*
+	 * public boolean isGameOver() { for (String player : this.playerIDs) { if
+	 * (hasEmptyHand(player)) { return true; } } return false; }
+	 */
 
 	public String getCurrentPlayer() {
 		return this.playerIDs.get(this.currentPlayer);
@@ -368,8 +370,10 @@ public class Game {
 	// Currently does not work with wild cards
 	public String uno(String userID, UnoCard.Color color, UnoCard.Value value) {
 		if (this.getPlayerHand(userID).size() == 1) {
-			String wonGame = "";
-			return wonGame; // Sucess
+			String wonGameNotification = "{"
+					+ "\"type\" : \"notification\","
+					+ "\"message\" : \"" userID + "won the game!\""
+					+ "}";
 		}
 		String errorMessage = "{" + "\"type\" : \"error\"," + "\"message\" : \"You have "
 				+ this.getPlayerHand(userID).size() + "cards left\"" + "}";
