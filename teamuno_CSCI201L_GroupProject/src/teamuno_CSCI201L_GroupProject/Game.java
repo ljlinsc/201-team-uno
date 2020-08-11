@@ -297,7 +297,7 @@ public class Game {
 				this.gameDirection ^= true;
 			} else if (UnoCard.Value.Skip == value) {
 				
-				if (this.gameDirection) {
+				if (!this.gameDirection) {
 					currentPlayer = (currentPlayer + 1) % playerIDs.size();
 				} else {
 					if (currentPlayer == 0)

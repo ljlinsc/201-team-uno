@@ -1,25 +1,19 @@
 package teamuno_CSCI201L_GroupProject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import javax.servlet.http.HttpServlet;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
-import javax.websocket.server.ServerEndpoint;
 import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /*
  * Format of JSON Messages:
@@ -113,11 +107,15 @@ import org.json.simple.JSONObject;
  */
 
 @ServerEndpoint(value = "/RoomSocket")
-public class RoomSocket {
+public class RoomSocket implements Serializable {
 	private static HashMap<String, Game> rooms = new HashMap<String, Game>();
 	
 	public static void addNewRoom(String id) {
 		rooms.put(id, new Game(id));
+		String s  = "10";
+		Thread.yield();
+		Thread.sleep(100);
+		int n = Integer.parseInt(s);
 	}
 	
 	public static boolean roomsExists(String id) {
@@ -133,7 +131,7 @@ public class RoomSocket {
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println(message);
-
+		session.println();
 		String cardData = "<div class=\"card\">\n" + 
 				"				<div class=\"card-back card-face\">\n" + 
 				"					<img class=\"uno\" src=\"IMG/Blue_Zero.png\">\n" + 

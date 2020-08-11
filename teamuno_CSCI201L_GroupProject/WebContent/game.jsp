@@ -136,5 +136,6 @@ if (createGame != null && createGame.equals("true")) {
 		<button id="drawButton" onclick="draw()">Draw</button>
 		<button id="unoButton" onclick="uno()">Uno!</button>
 	</div>
+
 </body>
 </html>
