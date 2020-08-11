@@ -278,6 +278,8 @@ function placeCard(card) {
 function initCards(JSONData) {
 	console.log("initCards()");
 	document.getElementById("readyButton").style.display = "none";
+	document.getElementById("drawButton").style.display = "block";
+	document.getElementById("unoButton").style.display = "block";
 	var cardHolder = document.getElementsByClassName("game-container");
 	
 	var cardData = 
@@ -475,7 +477,7 @@ function playWildFour(cardSelection) {
 	} else if (cardSelection === 'Yellow') {
 		color = "Yellow";
 	} else if (cardSelection === 'Green') {
-		color = "Green;"
+		color = "Green";
 	}
 	var playerID = document.getElementById("playerID").innerHTML;
 	var roomID = document.getElementById("gameRoomID").innerHTML;
