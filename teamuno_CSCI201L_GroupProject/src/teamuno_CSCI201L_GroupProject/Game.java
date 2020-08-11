@@ -259,6 +259,16 @@ public class Game {
 			};
 		}
 	}
+	public void removeCardFromPlayer(String userID, UnoCard cardToRemove) {
+		Vector<UnoCard> playerHand = this.playerHand.get(playerIDs.indexOf(userID));
+		for (int i = 0; i < playerHand.size(); i++) {
+			UnoCard candidate = playerHand.get(i);
+			if (candidate.getColor() == cardToRemove.getColor() && candidate.getValue() == cardToRemove.getValue()) {
+				playerHand.remove(i);
+				break;
+			}
+		}
+	}
 	
 	// TODO: Currently does not work with wild cards!!!
 	public String takeTurn(String userID, UnoCard.Color color, UnoCard.Value value) {
@@ -293,16 +303,19 @@ public class Game {
 			cardToRemove = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild).toString();
 			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four));
 			topCard = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild).toString();
+			removeCardFromPlayer(userID, new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild));
 			this.broadcastMessage("{"
 					+ "\"type\" : \"notification\","
 					+ "\"message\" : \""+userID+" has used wild card, setting color to " + color +"\""
 					+ "}");
+			
 						
 		} else if (value == UnoCard.Value.Wild_Four) {
 			this.validColor = color;
 			cardToRemove = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four).toString();
 			this.stockPile.add(new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild));
 			topCard = new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four).toString();
+			removeCardFromPlayer(userID, new UnoCard(UnoCard.Color.Wild, UnoCard.Value.Wild_Four));
 			this.drawCallBack(playerIDs.get(currentPlayer),4);
 			this.broadcastMessage("{"
 					+ "\"type\" : \"notification\","
@@ -315,6 +328,7 @@ public class Game {
 			this.stockPile.add(new UnoCard(color, value));
 			cardToRemove = new UnoCard(color, value).toString();
 			topCard = new UnoCard(color, value).toString();
+			removeCardFromPlayer(userID, new UnoCard(color, UnoCard.Value.DrawTwo));
 			drawCallBack(playerIDs.get(currentPlayer), 2);
 		} else {
 			this.validColor = color;
@@ -338,6 +352,7 @@ public class Game {
 			stockPile.add(new UnoCard(color, value));
 			cardToRemove = new UnoCard(color, value).toString();
 			topCard = new UnoCard(validColor, validValue).toString();
+			removeCardFromPlayer(userID, new UnoCard(color, value));
 		}
 		
 		System.out.println("nextPlayer: " + playerIDs.get(currentPlayer) + " index="+currentPlayer);
@@ -367,24 +382,30 @@ public class Game {
 
 	}
 
+	// TODO; Currently, Uno is can only be called by any player
 	// Currently does not work with wild cards
-	public String uno(String userID, UnoCard.Color color, UnoCard.Value value) {
+	public String uno(String userID) {
+		System.out.println("uno(): currentCardsLeft " + this.getPlayerHandSize(userID));
 		if (this.getPlayerHand(userID).size() == 1) {
 			String wonGameNotification = "{"
 					+ "\"type\" : \"notification\","
-					+ "\"message\" : \"" userID + "won the game!\""
+					+ "\"message\" : \"" +userID + "won the game!\""
 					+ "}";
-		}
-		String errorMessage = "{" + "\"type\" : \"error\"," + "\"message\" : \"You have "
-				+ this.getPlayerHand(userID).size() + "cards left\"" + "}";
-		// Send message to userplayerID
-		int index = playerIDs.indexOf(userID);
-		try {
-			sessions.get(index).getBasicRemote().sendText(errorMessage);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Game (id=" + gameID + ") could not send error message for uno to player=" + userID);
-			e.printStackTrace();
+			this.finished = true;
+			return wonGameNotification;
+		} else {
+			
+			String errorMessage = "{" + "\"type\" : \"error\"," + "\"message\" : \"You have "
+					+ this.getPlayerHand(userID).size() + "cards left\"" + "}";
+			// Send message to userplayerID
+			int index = playerIDs.indexOf(userID);
+			try {
+				sessions.get(index).getBasicRemote().sendText(errorMessage);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Game (id=" + gameID + ") could not send error message for uno to player=" + userID);
+				e.printStackTrace();
+			}
 		}
 
 		return null; // Error
@@ -430,14 +451,14 @@ public class Game {
 //		System.out.println("vaildcard: " )
 		// Needs to be current player's turn
 		// TODO: checkPlayerTurn function faSiling
-		if (checkPlayerTurn(userID)) {
+		if (action.equals("uno")) {
+			return uno(userID);
+		} else if (checkPlayerTurn(userID)) {
 			if (action.equals("draw") /* && checkPlayerTurn(userID) */) {
 				return submitDraw(userID);
 			} else if (isValidCardPlay(new UnoCard(currentAction.getCardColor(), currentAction.getCardValue()))) {
 				if (action.equals("makeTurn")) {
 					return takeTurn(userID, currentAction.getCardColor(), currentAction.getCardValue());
-				} else if (action.equals("uno")) {
-					return uno(userID, currentAction.getCardColor(), currentAction.getCardValue());
 				}
 			}
 		} else { // Could not process request

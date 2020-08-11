@@ -423,7 +423,15 @@ function joinGame() {
 }
 
 function uno() {
-	game.socket.send("uno");
+	var gameID = document.getElementById("gameRoomID").innerHTML;
+	var playerID = document.getElementById("playerID").innerHTML;
+	var unoInstructions = {
+			"action" : "uno",
+			"username" : playerID,
+			"nickname" : playerID,
+			"roomID" : gameID
+	}
+	game.socket.send(JSON.stringify(unoInstructions));
 }
 
 function playWild(cardSelection) {

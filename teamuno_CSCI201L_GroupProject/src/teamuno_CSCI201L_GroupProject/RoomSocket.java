@@ -252,9 +252,18 @@ public class RoomSocket implements Serializable {
 			else {
 				roomID = (String)json.get("roomID");
 				player_room = this.getRoomByID(roomID);
-				if (player_room != null && player_room.isRunning()) {
-					player_room.processRequest(message);					
-				} else {
+				if (player_room != null) {
+					if (player_room.isGameOver()) {
+						String errorMessage = "{"
+								+ "\"type\" : \"error\""
+								+ "\"message\" : \"Game is over. Cannot play turn\""
+								+ "}";
+						sendMessage(session, errorMessage);
+					} else if (player_room != null && player_room.isRunning() && !player_room.isGameOver()) {
+						player_room.processRequest(message);					
+					} 
+				}
+					else {
 					String errorMessage = "{"
 							+ "\"type\" : \"error\""
 							+ "\"message\" : \"Game is not running\""
@@ -264,6 +273,16 @@ public class RoomSocket implements Serializable {
 		}
 		
 	
+	}
+	
+	public void sendMessage(Session session, String message) {
+		try {
+			session.getBasicRemote().sendText(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		}
 	}
 	
 	@OnClose
