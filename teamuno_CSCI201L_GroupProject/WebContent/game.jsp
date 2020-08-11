@@ -142,7 +142,7 @@ if (createGame != null && createGame.equals("true")) {
 		<div class="game-info-players">
 			<div class="game-info">
 				<span><b id="playerID"><%=user.getUsername()%></b><b>
-						(YOU)</b></span>
+						(YOU)</b> <t style = "float:right">Cards in hand: <t id = "player-id-<%=user.getUsername()%>">5</t></t></span>
 			</div>
 		</div>
 	</div>

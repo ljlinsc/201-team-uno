@@ -196,6 +196,9 @@ function draw() {
 				"roomID" : roomID
 		};
 		game.socket.send(JSON.stringify(data));
+// var currentCardsInHand = parseInt($('#player-id-' + username).text());
+// currentCardsInHand++;
+// $('#player-id-' + username).text(currentCardsInHand);
 }
 
 
@@ -278,7 +281,11 @@ function placeCard(card) {
 				"cardValue" : value
 		}
 		console.log("cardColor="+color +" value="+value);
+		console.log("Decreasing handsize.");
 		game.socket.send(JSON.stringify(playCardInstructions));
+// var currentCardsInHand = parseInt($('#player-id-' + playerID).text());
+// currentCardsInHand--;
+// $('#player-id-' + playerID).text(currentCardsInHand);
 	}
 	
 }
@@ -321,7 +328,31 @@ function takeTurnCallback(HTMLData) {
 		
 	
 	var playerID = document.getElementById("playerID").innerHTML;
-	
+	if(topCard == 'Wild_Wild_Four' && playerID != nextPlayer){
+		 var currentCardsInHand = parseInt($('#player-id-' + nextPlayer).text());
+		 currentCardsInHand += 4;
+		 $('#player-id-' + nextPlayer).text(currentCardsInHand);
+	}	
+	else if(topCard =='Yellow_DrawTwo' && playerID != nextPlayer){
+		 var currentCardsInHand = parseInt($('#player-id-' + nextPlayer).text());
+		 currentCardsInHand += 2;
+		 $('#player-id-' + nextPlayer).text(currentCardsInHand);
+	}
+	else if(topCard =='Blue_DrawTwo' && playerID != nextPlayer){
+		 var currentCardsInHand = parseInt($('#player-id-' + nextPlayer).text());
+		 currentCardsInHand += 2;
+		 $('#player-id-' + nextPlayer).text(currentCardsInHand);
+	}
+	else if(topCard =='Green_DrawTwo' && playerID != nextPlayer){
+		 var currentCardsInHand = parseInt($('#player-id-' + nextPlayer).text());
+		 currentCardsInHand += 2;
+		 $('#player-id-' + nextPlayer).text(currentCardsInHand);
+	}
+	else if(topCard =='Red_DrawTwo' && playerID != nextPlayer){
+		 var currentCardsInHand = parseInt($('#player-id-' + nextPlayer).text());
+		 currentCardsInHand += 2;
+		 $('#player-id-' + nextPlayer).text(currentCardsInHand);
+	}
 	// Remove card from the player that put down that card on Screen
 	if (playerID === requestSentBy) {
 		previousCardDraw.remove();
@@ -339,7 +370,10 @@ function takeTurnCallback(HTMLData) {
 		document.getElementById("players_turn").innerHTML = "YOUR TURN";
 	}
 	else document.getElementById("players_turn").innerHTML = "NOT YOUR TURN";
-	
+	console.log('Changing handsize.');
+	var currentCardsInHand = parseInt($('#player-id-' + requestSentBy).text());
+	currentCardsInHand--;
+	$('#player-id-' + requestSentBy).text(currentCardsInHand);
 	
 	// Change Top Card
 	changeTopCard(topCard);
@@ -377,8 +411,12 @@ function addCardToHand(JSONData) {
 	
 	// Update Card Hand for Player that sent request
 	if (playerID === requestSentBy) {
-		cardHolder[1].innerHTML += cardData;		
+		cardHolder[1].innerHTML += cardData;
 	}
+	console.log('Increasing handsize.');
+	 var currentCardsInHand = parseInt($('#player-id-' + requestSentBy).text());
+	 currentCardsInHand++;
+	 $('#player-id-' + requestSentBy).text(currentCardsInHand);
 }
 
 // 
@@ -391,7 +429,7 @@ function changeCurrentPlayer(JSONData) {
 function addNewPlayer(JSONData) {
 	var newUserID = JSONData.newUserID;
 	var playerData = "<div class=\"game-info\">\n" + 
-	"				<span>" + newUserID+ "</span>\n" + 
+	"				<span>" + newUserID+ "</span>\n <t style = \"float:right\">Cards in hand: <t id = player-id-"+newUserID+">5</t></t>"+ 
 	"			</div>" 
 	
 	var gamePlayerContainer = document.getElementsByClassName("game-info-players")[0];
