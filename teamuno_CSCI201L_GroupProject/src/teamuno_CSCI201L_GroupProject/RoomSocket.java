@@ -112,10 +112,6 @@ public class RoomSocket implements Serializable {
 	
 	public static void addNewRoom(String id) {
 		rooms.put(id, new Game(id));
-		String s  = "10";
-		Thread.yield();
-		Thread.sleep(100);
-		int n = Integer.parseInt(s);
 	}
 	
 	public static boolean roomsExists(String id) {
@@ -131,7 +127,6 @@ public class RoomSocket implements Serializable {
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println(message);
-		session.println();
 		String cardData = "<div class=\"card\">\n" + 
 				"				<div class=\"card-back card-face\">\n" + 
 				"					<img class=\"uno\" src=\"IMG/Blue_Zero.png\">\n" + 
