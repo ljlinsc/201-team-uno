@@ -452,6 +452,9 @@ public class Game {
 	}
 
 	private boolean allReady() {
+		if (players.size() < 2) {
+			return false;
+		}
 		for (User u : this.players) {
 			if (!u.isReady()) {
 				return false;
