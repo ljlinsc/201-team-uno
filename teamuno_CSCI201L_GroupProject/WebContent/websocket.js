@@ -471,3 +471,8 @@ function playWildFour(cardSelection) {
 	wildFour.style.display = "none";
 	game.socket.send(JSON.stringify(playCardInstructions));
 }
+
+function closePopUp(ID) {
+	var popup = document.getElementsByClassName(ID)[0];
+	popup.style.display = "none";
+}

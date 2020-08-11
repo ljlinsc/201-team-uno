@@ -75,7 +75,7 @@ if (createGame != null && createGame.equals("true")) {
 
 		<!-- Modal content -->
 		<div class="modal-content">
-			<span class="close">&times;</span>
+			<span onclick="closePopUp('selectWildCard')" class="close">&times;</span>
 			<p>Select your Wild Card color</p>
 			<button id="wildRedButton" onclick="playWild('Red')">RED</button>
 			<button id="wildBlueButton" onclick="playWild('Blue')">BLUE</button>
@@ -89,7 +89,7 @@ if (createGame != null && createGame.equals("true")) {
 	<div id="myModal" class="modal selectWildFourCard">
 		<!-- Modal content -->
 		<div class="modal-content selectWildFourCard">
-			<span class="close">&times;</span>
+			<span onclick="closePopUp('selectWildFourCard')"class="close">&times;</span>
 			<p>Select your Wild Four Card color</p>
 			<button id="wildRedButton" onclick="playWildFour('Red')">RED</button>
 			<button id="wildBlueButton" onclick="playWildFour('Blue')">BLUE</button>
