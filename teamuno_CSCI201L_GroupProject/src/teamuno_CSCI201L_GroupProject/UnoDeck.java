@@ -24,27 +24,52 @@ public class UnoDeck {
 	
 	private void resetUnoDeck() {
 		this.cards = new Vector<UnoCard>();
-		UnoCard.Color[] colors = UnoCard.Color.values();
-		for (int i = 0; i < colors.length - 1; i++) {
-			UnoCard.Color color = colors[i];
+		Vector<UnoCard.Color> colors = new Vector<UnoCard.Color>();
+		colors.add(UnoCard.Color.Blue);
+		colors.add(UnoCard.Color.Green);
+		colors.add(UnoCard.Color.Red);
+		colors.add(UnoCard.Color.Yellow);
+		
+		for (int i = 0; i < colors.size(); i++) {
+			UnoCard.Color color = colors.get(i);
 			
 			// Add 0 card
-			cards.add(new UnoCard(color, UnoCard.Value.getValue(0)));
+			cards.add(new UnoCard(color, UnoCard.Value.Zero));
 			
 			// Add cards 1-9
-			for (int j = 0; j < 10; j++) {
-				cards.add(new UnoCard(color, UnoCard.Value.getValue(i+1)));
-				cards.add(new UnoCard(color, UnoCard.Value.getValue(i+1)));
+			UnoCard.Value one = UnoCard.Value.One;
+			UnoCard.Value two = UnoCard.Value.Two;
+			UnoCard.Value three = UnoCard.Value.Three;
+			UnoCard.Value four = UnoCard.Value.Four;
+			UnoCard.Value five = UnoCard.Value.Five;
+			UnoCard.Value six = UnoCard.Value.Six;
+			UnoCard.Value seven = UnoCard.Value.Seven;
+			UnoCard.Value eight = UnoCard.Value.Eight;
+			UnoCard.Value nine = UnoCard.Value.Nine;
+
+			for (int j = 0; j < 2; j++) {
+				cards.add(new UnoCard(color, one));
+				cards.add(new UnoCard(color, two));
+				cards.add(new UnoCard(color, three));
+				cards.add(new UnoCard(color, four));
+				cards.add(new UnoCard(color, five));
+				cards.add(new UnoCard(color, six));
+				cards.add(new UnoCard(color, seven));
+				cards.add(new UnoCard(color, eight));
+				cards.add(new UnoCard(color, nine));
 			}
 			
-			UnoCard.Value[] values = new UnoCard.Value[] {UnoCard.Value.DrawTwo, UnoCard.Value.Reverse, UnoCard.Value.Skip};
-			for (UnoCard.Value value : values) {
-				cards.add(new UnoCard(color, value));
-				cards.add(new UnoCard(color, value));
+			for (int k = 0; k < 2; k++) {
+				cards.add(new UnoCard(color, UnoCard.Value.DrawTwo));
+				cards.add(new UnoCard(color, UnoCard.Value.Reverse));
+				cards.add(new UnoCard(color, UnoCard.Value.Skip));
+
 			}
 			
 			
 		}
+		
+		
 		UnoCard.Value[] values = new UnoCard.Value[] {UnoCard.Value.Wild, UnoCard.Value.Wild_Four};
 		
 		for (UnoCard.Value value : values) {
@@ -52,20 +77,22 @@ public class UnoDeck {
 				cards.add(new UnoCard(UnoCard.Color.Wild, value));
 			}
 		}
-		
-		this.cardsInDeck = 108;
 	}
 	
-	public void shuffle() {
+	public void shuffle() {      
 		int n = cards.size();
 		Random random = new Random();
-		
+		random.nextInt();
 		for (int i = 0; i < cards.size(); i++) {
 			int randomValue = i + random.nextInt(n - i);
-			UnoCard randomCard = cards.get(randomValue);
-			cards.set(randomValue, cards.get(i));
-			cards.set(i, randomCard);
+			swap(cards, i, randomValue);
 		}
+	}
+	
+	private void swap(Vector<UnoCard> a, int i, int change) {
+		UnoCard helper = a.get(i);
+		a.set(i, a.get(i));
+		a.set(change, helper);
 	}
 	
 	public void replaceDeckWith(Vector<UnoCard> cards) {

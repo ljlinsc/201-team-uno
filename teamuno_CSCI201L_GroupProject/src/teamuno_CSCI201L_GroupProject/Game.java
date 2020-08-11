@@ -60,7 +60,7 @@ public class Game {
 	public void start() {
 		System.out.println("Game: starting game");
 		for (int i = 0; i < playerIDs.size(); i++) {
-			Vector<UnoCard> hand = new Vector<UnoCard>(deck.drawCard(4));
+			Vector<UnoCard> hand = new Vector<UnoCard>(deck.drawCard(50));
 			playerHand.setElementAt(hand, i);
 		}
 
