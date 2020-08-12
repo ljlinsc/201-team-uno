@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>3</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>411</x>
+      <y>153</y>
+      <w>63</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+Color
+--
+Red, Blue, Green, Yellow, Wild
+-colors: Color[]
+--
++getColor(i : Integer) : Color</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>372</x>
+      <y>114</y>
+      <w>102</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+Value
+--
+Zero, One, Two, Three, Four, Five, Six, Seven, Eight, 
+Nine, DrawTwo, Skip, Reverse, Wild, Wild_Four
+-values: Value[]
+--
++getValue(i : Integer) : Value</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>504</x>
+      <y>102</y>
+      <w>108</w>
+      <h>93</h>
+    </coordinates>
+    <panel_attributes>UnoCard
+{innerclass
+&lt;&lt;enum&gt;&gt;
+Color
+--
+Red, Blue, Green, Yellow, Wild
+-colors: Color[]
+--
++getColor(i : Integer) : Color
+innerclass}
+{innerclass
+&lt;&lt;enum&gt;&gt;
+Value
+--
+Zero, One, Two, Three, Four, Five, Six, Seven, Eight, 
+Nine, DrawTwo, Skip, Reverse, Wild, Wild_Four
+-values: Value[]
+--
++getValue(i : Integer) : Value
+innerclass}
+--
++UnoCard(color: Color, value: Value)
++getColor() : Color
++getValue() : Value
++toString() : String
++getImageString() : String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>462</x>
+      <y>213</y>
+      <w>123</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>UnoDeck
+--
+-cards: Vector&lt;UnoCard&gt;
+-cardsInDeck: Integer
+--
++UnoDeck()
++resetUnoDeck() : void
++shuffle() : void
++replaceDeckWith(cards: Vector&lt;UnoCard&gt;) : void
++isEmpty() : boolean
++drawCard() : UnoCard
++topCardImage() : String
++drawCard(number: Integer) : Vector&lt;UnoCard&gt;
+
+-swap(a: Vector&lt;UnoCard&gt;, i: Integer, change: Integer) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>501</x>
+      <y>294</y>
+      <w>66</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Serializable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>471</x>
+      <y>324</y>
+      <w>123</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>RoomSocket
+--
+-rooms: HashTable&lt;String Game&gt;
+--
++addNewRoom(id: String) : void
++roomExists(id: String) : boolean
++open(session: Session) : void
++onMessage(message: String, session: Session) : void
++sendMessage(session: Session, message: String) : void
++close(session: Session) : void
++error(error: Throwable) : void
+-checkIfUserInRoom(username: String) : boolean
+-getRoomByID(ID: String) : Game
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>294</x>
+      <y>213</y>
+      <w>147</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Servlet&gt;&gt;
+JDBC_Core
+--
+_+veryifySignIn(username: String, password: String) : User_
+_+createUser(username: String, password: String, nickname: String): User_
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>363</y>
+      <w>102</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>MessageHandler
+--
+-game: Game
+-message: String
+--
++MessageHandler(game: Game, message: String)
++run() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>255</x>
+      <y>156</y>
+      <w>147</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Servlet&gt;&gt;
+CreateUserServlet
+--
+_-serialVersionUID: Long_
+--
+#doPost(request: HttpRequest, response: HttpServletResponse) : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>129</x>
+      <y>255</y>
+      <w>147</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Servlet&gt;&gt;
+EnterGameServlet
+--
+_-serialVersionUID: Long_
+_-allRoomID: HashSet&lt;String&gt;_
+--
+#doGet(request: HttpRequest, response: HttpServletResponse) : void
+#doPost(request: HttpRequest, response: HttpServletResponse) : void
+-generate(): String
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>123</x>
+      <y>210</y>
+      <w>147</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Servlet&gt;&gt;
+GuestServlet
+--
+_-serialVersionUID: Long_
+_-numGuests: Integer_
+--
+#doPost(request: HttpRequest, response: HttpServletResponse) : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>309</x>
+      <y>279</y>
+      <w>147</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Servlet&gt;&gt;
+SignInServlet
+--
+_-serialVersionUID: Long_
+
+--
+#doPost(request: HttpRequest, response: HttpServletResponse) : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>471</x>
+      <y>162</y>
+      <w>39</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+&lt;&lt;Contains&gt;&gt;</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>471</x>
+      <y>126</y>
+      <w>39</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+&lt;&lt;Contains&gt;&gt;</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>144</x>
+      <y>306</y>
+      <w>147</w>
+      <h>249</h>
+    </coordinates>
+    <panel_attributes>Game
+--
+-currentPlayer: Integer
+-playerIDs: Vector&lt;String&gt;
+-players: Vector&lt;User&gt;
+-gameID: String
+-running: booleean
+-deck: UnoDeck
+-playerHand: Vector&lt;Vector&lt;UnoCard&gt;&gt;
+-stockPile: vector&lt;UnoCard&gt;
+-gameDirection: boolean
+-finished: boolean
+-validValue: Value
+-vaildColor: Color
+-sessions: Vector&lt;Session&gt;
+-actions: Vector&lt;Action&gt;
++userLookup: Lock
++sendMessageLock: ReentrantLock
+--
++Game(id: String)
++isRunning(): boolean
++isGameOver(): boolean
++start(): void
++getTopCard(): UnoCard
++sendMessageToAllUsers(message: String): void
++threadedBroadcastMessage(message: String): void
++getTopCardImage(): String
++getCurrentPlayer(): String
++getCurrentPlayerHand(): Vector&lt;UnoCard&gt;
++getPreviousPlayer(i: Integer): String
++getPlayerHand(id: String): Vector&lt;UnoCard&gt;
++getPlayerHandSize(id: String): Integer
++getPlayerCard(id: String, choice: Integer): UnoCard
++hasEmptyHand(id: String): boolean
++isValidCardPlay(card: UnoCard): boolean
++checkPlayerTurn(pid: String): boolean
++submitDraw(pid: String): String
++setCardColor(color: Color): void
++addSession(session: Session): void
++drawCallBack(userID: String, n: Integer): void
++removeCardFromPlayer(userID: String, cardToRemove: UnoCard): void
++takeTurn(userID: String, color: Color): String
++uno(userID: String): String
++processRequest(json: String): void
++play(action: String, userID: String, cardColor: String, cardValue: String): String
++getUserCount(): Integer
+-allReady(): boolean
++getUserByNickname(nickname: String): User
++hasUserByUserName(username: String): boolean
++hasUserByNickname(nickname: String): boolean
++setUserReady(userID: String): void
++broadcastMessage(message: String)
++addUser(user: User): void
++getUserByUsername(username: String): User</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>375</y>
+      <w>75</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;Uses&gt;&gt;</panel_attributes>
+    <additional_attributes>230.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>198</x>
+      <y>282</y>
+      <w>9</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>267</x>
+      <y>219</y>
+      <w>33</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;Uses&gt;&gt;</panel_attributes>
+    <additional_attributes>90.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>345</y>
+      <w>189</w>
+      <h>9</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>610.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>528</x>
+      <y>306</y>
+      <w>36</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;Implements&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>483</x>
+      <y>180</y>
+      <w>30</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+&lt;&lt;Contains&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>486</x>
+      <y>282</y>
+      <w>9</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>183</y>
+      <w>24</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;Uses&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>252</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;Uses&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0;30.0;140.0</additional_attributes>
+  </element>
+</diagram>
